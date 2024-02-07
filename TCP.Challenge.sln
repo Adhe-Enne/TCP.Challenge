@@ -1,0 +1,64 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.7.34202.233
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "1 - Applications", "1 - Applications", "{59CDCB40-816B-4EA7-97FB-7DC137286EA1}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2 - Business", "2 - Business", "{4387060D-AB43-4BD7-9664-1C40C3E3F71A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "3 - Persistence", "3 - Persistence", "{5FBA5BE9-0E5F-4DE0-9520-A19CFDEB758A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "4 - Shared", "4 - Shared", "{011B793A-EBED-46B7-83EF-2FD45368B985}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TCP.Business", "TCP.Business\TCP.Business.csproj", "{38CF2764-0767-49FF-A35B-052CF0201140}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TCP.DbContext", "TCP.DbContext\TCP.DbContext.csproj", "{2BC58538-5F47-4ABC-BA8E-B1DA9583EE1A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TCP.Repository", "TCP.Repository\TCP.Repository.csproj", "{7DF008C4-FA6E-4A44-9679-CDCFB9BDC051}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TCP.Api", "TCP.Api\TCP.Api.csproj", "{D24C18A4-2555-461F-A0F5-F9E8CB6996D5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TCP.Model", "TCP.Model\TCP.Model.csproj", "{ACA341FB-CA2E-4DC1-8826-2D115514F450}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{38CF2764-0767-49FF-A35B-052CF0201140}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{38CF2764-0767-49FF-A35B-052CF0201140}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{38CF2764-0767-49FF-A35B-052CF0201140}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{38CF2764-0767-49FF-A35B-052CF0201140}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2BC58538-5F47-4ABC-BA8E-B1DA9583EE1A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2BC58538-5F47-4ABC-BA8E-B1DA9583EE1A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2BC58538-5F47-4ABC-BA8E-B1DA9583EE1A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2BC58538-5F47-4ABC-BA8E-B1DA9583EE1A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7DF008C4-FA6E-4A44-9679-CDCFB9BDC051}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7DF008C4-FA6E-4A44-9679-CDCFB9BDC051}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7DF008C4-FA6E-4A44-9679-CDCFB9BDC051}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7DF008C4-FA6E-4A44-9679-CDCFB9BDC051}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D24C18A4-2555-461F-A0F5-F9E8CB6996D5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D24C18A4-2555-461F-A0F5-F9E8CB6996D5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D24C18A4-2555-461F-A0F5-F9E8CB6996D5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D24C18A4-2555-461F-A0F5-F9E8CB6996D5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ACA341FB-CA2E-4DC1-8826-2D115514F450}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ACA341FB-CA2E-4DC1-8826-2D115514F450}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ACA341FB-CA2E-4DC1-8826-2D115514F450}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ACA341FB-CA2E-4DC1-8826-2D115514F450}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{38CF2764-0767-49FF-A35B-052CF0201140} = {4387060D-AB43-4BD7-9664-1C40C3E3F71A}
+		{2BC58538-5F47-4ABC-BA8E-B1DA9583EE1A} = {5FBA5BE9-0E5F-4DE0-9520-A19CFDEB758A}
+		{7DF008C4-FA6E-4A44-9679-CDCFB9BDC051} = {5FBA5BE9-0E5F-4DE0-9520-A19CFDEB758A}
+		{D24C18A4-2555-461F-A0F5-F9E8CB6996D5} = {59CDCB40-816B-4EA7-97FB-7DC137286EA1}
+		{ACA341FB-CA2E-4DC1-8826-2D115514F450} = {011B793A-EBED-46B7-83EF-2FD45368B985}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {A7E1DFDF-F48F-4698-8535-ACB9F44C31F7}
+	EndGlobalSection
+EndGlobal
