@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\Adhe.Core\Core.Abstractions\Core.Abstractions.csproj" />
+  </ItemGroup>
+
 </Project>

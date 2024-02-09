@@ -6,4 +6,9 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\Adhe.Core\Core.Abstractions\Core.Abstractions.csproj" />
+    <ProjectReference Include="..\TCP.DbContext\TCP.DataBaseContext.csproj" />
+  </ItemGroup>
+
 </Project>
