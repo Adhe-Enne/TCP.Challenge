@@ -32,7 +32,10 @@ namespace TCP.Api.Controllers
             if (entity is null)
                 Log.Information(message);
             else
-                Log.Information(message, Core.Externals.JsonConvert.Serialize(entity));
+            {
+                var data = Core.Externals.JsonConvert.Serialize(entity);
+                Log.Information(message + ": {@data}", data);
+            }
         }
     }
 }

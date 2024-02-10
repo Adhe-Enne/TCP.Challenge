@@ -2,7 +2,6 @@
 using Core.Abstractions;
 using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
-using System;
 using TCP.Business.Services;
 using TCP.Business.Validators;
 using TCP.Model.Entities;
@@ -17,7 +16,7 @@ namespace TCP.Business.IoC
             services.AddScoped<IValidator<Client>, ClientValidator>();
 
             //Business
-            services.AddScoped(typeof(IService<Client>), typeof(ClientService));
+            services.AddScoped(typeof(IServiceCrud<Client>), typeof(ClientService));
         }
     }
 }

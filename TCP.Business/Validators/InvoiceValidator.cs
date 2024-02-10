@@ -12,12 +12,12 @@ namespace TCP.Business.Validators
     {
         public InvoiceValidator()
         {
-            //RuleFor(x => x.Id).GreaterThan(2000).WithMessage("");
             RuleFor(x => x.ClientId)
                 .NotNull().WithMessage("¡Numero de Cliente puede ser vacio!")
-                .GreaterThan(1000).WithMessage("¡Numero de Cliente debe ser mayor a 1000!");
-
+                .GreaterThan(999).WithMessage("¡Numero de Cliente debe ser mayor a 1000!");
+            RuleFor(x => x.CustomerId).NotNull();
             RuleFor(x => x.TotalAmount).GreaterThan(0);
+            RuleFor(x => x.TotalQty).GreaterThan(0);
         }
     }
 }

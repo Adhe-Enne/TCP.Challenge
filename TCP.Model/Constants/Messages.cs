@@ -8,23 +8,27 @@ namespace TCP.Model.Constants
 {
     public static class Messages
     {
-        //Error
-        public static string ENTITY_UNFOUND = "¡No se encontro registro en la base de Datos!";
-        public static string ENTITY_ERROR_VALIDATE = "¡Se detectaron valores invalidos!";
+        //Error const
+        public const string ENTITY_UNFOUND = "¡No se encontro registro en la base de Datos!";
+        public const string INVOICE_UNFOUND = "¡No se encontro Factura en la base de Datos!";
+        public const string CLIENT_UNFOUND = "¡No se encontro Cliente en la base de Datos!";
+        public const string PROD_UNFOUND = "¡No se encontro Producto en la base de Datos!";
+        public const string ENTITY_ERROR_VALIDATE = "¡Se detectaron datos invalidos!";
 
-        //Success
-        public static string CREATE_SUCCESS = "¡Registro creado con exito!";
+        //Success const
+        public const string CREATE_SUCCESS = "¡Registro creado con exito!";
+                    
 
-
-        //Common
-        public static string CUIT_EXISTS = "El Cuit ingresado ya existe en el sistema";
-        public static string ENTITY_INSERT = "Insertando Nuevo Registro";
-        public static string ENTITY_UPDATE= "Actualizando Registro";
-        public static string ENTITY_UPDATED= "¡Registro Actualizado con Exito!";
-        public static string ENTITY_DELETE= "Eliminando Registro";
-        public static string ENTITY_DELETE_PERMANETLY= "Eliminando Registro Permanentemente";
-        public static string ENTITY_DELETED= "¡Registro Eliminado con Exito!";
-        public static string ENTITY_DELETED_PERMANETLY= "¡Registro Eliminado con Exito! (Borrado Permanente)";
+        //Common const
+        public const string CUIT_EXISTS = "El Cuit ingresado ya existe en el sistema";
+        public const string ENTITY_INSERT = "Insertando Nuevo Registro";
+        public const string ENTITY_INSERTED = "¡Registro Guardado con Exito!";
+        public const string ENTITY_UPDATE= "Actualizando Registro";
+        public const string ENTITY_UPDATED= "¡Registro Actualizado con Exito!";
+        public const string ENTITY_DELETE= "Eliminando Registro";
+        public const string ENTITY_DELETE_PERMANETLY= "Eliminando Registro Permanentemente";
+        public const string ENTITY_DELETED= "¡Registro Eliminado con Exito!";
+        public const string ENTITY_DELETED_PERMANETLY= "¡Registro Eliminado con Exito! (Borrado Permanente)";
 
     }
 }

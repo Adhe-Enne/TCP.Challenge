@@ -8,6 +8,11 @@
         public int? StatusCode { get; set; }
         public string InvoiceStatus { get; set; }
         public string StatusDescription { get; set; }
+        public string InvoiceCode { get; set; }
+        public string CompanyName { get; set; }
+        public string CompanyEmail { get; set; }
+        public string CompanyPhone { get; set; }
+        public string CompanyAdress { get; set; }
         public ICollection<InvoiceDetailDto> Detail { get; set; }
     }
 }

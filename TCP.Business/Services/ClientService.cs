@@ -4,52 +4,41 @@ using FluentValidation;
 using FluentValidation.Results;
 using TCP.Model.Entities;
 using TCP.Model.Constants;
+using TCP.Model.Enums;
 
 namespace TCP.Business.Services
 {
     public class ClientService : Service<Client>, IServiceCrud<Client>
     {
-        private IValidator<Client> _validator;
-        public ClientService(IRepository<Client> repository, IValidator<Client> validator) : base(repository, validator)
+        public ClientService(IRepository<Client> repository, IValidator<Client> validator)
+            : base(repository, validator)
         {
-            _validator = validator;
-        }
-
-        public IGenericResult LogicDelete(int id)
-        {
-            Client? entity = this.Find(id);
-
-            entity.Status = Model.MainStatus.DELETED;
-            _repository.Update(entity);
-
-            return new GenericResult(Model.Constants.Messages.ENTITY_DELETED);
-        }
-
-        public IGenericResult PhysicDelete(int id)
-        {
-            Client? entity = this.Find(id);
-            _repository.Delete(entity);
-
-            return new GenericResult(Model.Constants.Messages.ENTITY_DELETED_PERMANETLY);
         }
 
         public IGenericResult Insert(Client entity)
         {
-            Validate(entity);
-
             bool cuitExists = _repository.AsQueryable().Any(x=> x.CUIT == entity.CUIT);
 
             if (cuitExists)
                 throw new TcpException(Messages.CUIT_EXISTS);
 
-            return new GenericResult();
+            Validate(entity);
+            _repository.Insert(entity);
+
+            return new GenericResult(Messages.ENTITY_INSERTED);
         }
 
         public IGenericResult Update(Client entity)
         {
-            this.Validate(entity);
+            bool cuitExist = _repository.AsQueryable().Any(x => x.CUIT == entity.CUIT && x.Id != entity.Id);
 
-            Client toUpdate = GetValid(entity);
+            if (cuitExist)
+                throw new TcpException(Messages.CUIT_EXISTS);
+
+            Client? toUpdate = _repository.Find(x => x.Id == entity.Id || x.CUIT == entity.CUIT);
+
+            if (toUpdate is null)
+                throw new TcpException(Messages.CLIENT_UNFOUND);
 
             toUpdate.CompanyName = entity.CompanyName;
             toUpdate.Adress = entity.Adress;
@@ -57,18 +46,10 @@ namespace TCP.Business.Services
             if (entity.CompanyName.StartsWith(Constants.KeyName.DISTRIBUTOR))
                 toUpdate.Disabled = true;
 
+            this.Validate(entity);
+
             _repository.Update(toUpdate);
-            return new GenericResult();
-        }
-
-        private Client GetValid(Client entity)
-        {
-            Client? existed = _repository.Find(x => x.Id == entity.Id || x.CUIT == entity.CUIT);
-            
-            if (existed is null)
-                throw new TcpException(Messages.ENTITY_UNFOUND);
-
-            return entity;
+            return new GenericResult(Messages.ENTITY_UPDATED);
         }
     }
 }

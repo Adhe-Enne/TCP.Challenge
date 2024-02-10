@@ -1,14 +1,11 @@
 ﻿using AutoMapper;
-using Azure;
 using Core.Abstractions;
 using Core.Framework;
 using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
 using System.Net;
 using TCP.Model.Dto;
 using TCP.Model.Entities;
 using TCP.Model.Request;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace TCP.Api.Controllers
 {
@@ -24,7 +21,7 @@ namespace TCP.Api.Controllers
                 mapper
                 )
         {
-            _clientService = serviceCrud;   
+            _clientService = serviceCrud;
         }
 
         [HttpGet]
@@ -34,10 +31,10 @@ namespace TCP.Api.Controllers
 
             try
             {
-                IEnumerable<Client> src =  _clientService.GetAll();
+                IEnumerable<Client> src = _clientService.GetAll();
                 response.Data = _mapper.Map<IEnumerable<ClientDto>>(src);
             }
-            catch (Exception ex) 
+            catch (Exception ex)
             {
                 response.Set(HandleException(ex));
                 HttpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
@@ -58,7 +55,7 @@ namespace TCP.Api.Controllers
         {
             ClientRequest clientDto = new ClientRequest();
             clientDto.Company = company;
-            return GetAll(clientDto);
+            return GetAllByRequest(clientDto);
         }
 
         [HttpGet("cuit/{cuit}")]
@@ -68,10 +65,11 @@ namespace TCP.Api.Controllers
             ClientRequest clientDto = new ClientRequest();
             clientDto.Cuit = cuit;
 
-            return GetAll(clientDto);
+            return GetAllByRequest(clientDto);
         }
 
-        public IGridResult<ClientDto> GetAll(ClientRequest request)
+        [HttpGet("byrequest")]
+        public IGridResult<ClientDto> GetAllByRequest(ClientRequest request)
         {
             IGridResult<ClientDto> response = new GridResult<ClientDto>();
 
@@ -97,7 +95,7 @@ namespace TCP.Api.Controllers
         }
 
         [HttpPost]
-        public IGenericResult Insert([FromBody]ClientDto entity)
+        public IGenericResult Insert([FromBody] ClientDto entity)
         {
             LogInfo(Model.Constants.Messages.ENTITY_INSERT, entity);
             IGenericResult result = new GenericResult();

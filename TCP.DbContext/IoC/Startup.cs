@@ -9,6 +9,5 @@ namespace TCP.DataBaseContext.IoC
         {
             services.AddDbContext<DataBaseContext>(c => c.UseSqlServer(connectionString));
         }
-
     }
 }

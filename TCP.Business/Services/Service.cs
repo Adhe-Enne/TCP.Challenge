@@ -3,8 +3,10 @@ using Core.Framework;
 using FluentValidation;
 using FluentValidation.Results;
 using System.Linq.Expressions;
-using TCP.Model.Entities;
 using TCP.Model.Constants;
+using TCP.Model.Enums;
+using TCP.Model.Interfaces;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace TCP.Business.Services
 {
@@ -49,6 +51,31 @@ namespace TCP.Business.Services
             string message = string.Join("\n", validationResult.Errors.Select(x => x.ErrorMessage));
 
             throw new TcpException($"{Messages.ENTITY_ERROR_VALIDATE}: {message}");
+        }
+
+        public IGenericResult PhysicDelete(int id)
+        {
+            T entity = this.Find(id);
+
+            _repository.Delete(entity);
+
+            return new GenericResult(Model.Constants.Messages.ENTITY_DELETED_PERMANETLY);
+        }
+
+        public virtual IGenericResult LogicDelete(int id)
+        {
+            T? entity = this.Find(id);
+
+            if (entity is null)
+                throw new TcpException(Model.Constants.Messages.ENTITY_UNFOUND);
+
+            if (entity is IBusinessEntity)
+            {
+                ((IBusinessEntity)entity).Status = Model.Enums.MainStatus.DELETED;
+            }
+            _repository.Update(entity);
+
+            return new GenericResult(Model.Constants.Messages.ENTITY_DELETED);
         }
     }
 }
