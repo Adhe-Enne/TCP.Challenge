@@ -71,10 +71,14 @@ public partial class DataBaseContext : DbContext
             entity.Property(e => e.Name)
                 .HasMaxLength(50)
                 .IsUnicode(false);
+            entity.Property(e => e.City)
+                .HasMaxLength(50)
+                .IsUnicode(false);
             entity.Property(e => e.Phone)
                 .HasMaxLength(50)
                 .IsUnicode(false);
         });
+
 
         modelBuilder.Entity<Invoice>(entity =>
         {

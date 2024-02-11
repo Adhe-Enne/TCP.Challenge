@@ -23,7 +23,7 @@ namespace TCP.Api
             .WriteTo.File("Logs/Api_FileLogger_.txt", 
                 rollingInterval: RollingInterval.Hour,
                 fileSizeLimitBytes: 1024000,
-                outputTemplate: "[{Timestamp:yyyy-MM-dd | HH:mm:ss.fff} | {Level:u3}] | {Message:lj}{NewLine}{Exception}")
+                outputTemplate: "{Timestamp:yyyy-MM-dd HH:mm:ss.fff} | [{Level:u3}] | {Message:lj}{NewLine}{Exception}")
             .CreateLogger();
 
             Host.UseSerilog();

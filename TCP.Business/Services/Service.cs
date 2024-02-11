@@ -1,24 +1,17 @@
 ﻿using Core.Abstractions;
 using Core.Framework;
-using FluentValidation;
-using FluentValidation.Results;
 using System.Linq.Expressions;
-using TCP.Model.Constants;
-using TCP.Model.Enums;
 using TCP.Model.Interfaces;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace TCP.Business.Services
 {
     public class Service<T> : IService<T> where T : class, Core.Abstractions.IEntity
     {
         protected readonly IRepository<T> _repository;
-        private IValidator<T> _validator;
 
-        public Service(IRepository<T> repository, IValidator<T> validator)
+        public Service(IRepository<T> repository)
         {
             this._repository = repository;
-            this._validator = validator;
         }
 
         public T Find(int id)
@@ -41,19 +34,7 @@ namespace TCP.Business.Services
             return _repository.Find(where, includeProperties);
         }
 
-        public void Validate(T entity)
-        {
-            ValidationResult validationResult = _validator.Validate(entity);
-
-            if (validationResult.IsValid)
-                return;
-
-            string message = string.Join("\n", validationResult.Errors.Select(x => x.ErrorMessage));
-
-            throw new TcpException($"{Messages.ENTITY_ERROR_VALIDATE}: {message}");
-        }
-
-        public IGenericResult PhysicDelete(int id)
+        public virtual IGenericResult PhysicDelete(int id)
         {
             T entity = this.Find(id);
 
@@ -76,6 +57,23 @@ namespace TCP.Business.Services
             _repository.Update(entity);
 
             return new GenericResult(Model.Constants.Messages.ENTITY_DELETED);
+        }
+
+        public virtual IGenericResult Insert(T model)
+        {
+            _repository.Update(model);
+            return new GenericResult(Model.Constants.Messages.ENTITY_INSERTED);
+        }
+
+        public virtual IGenericResult Update(T model)
+        {
+            _repository.Update(model);
+            return new GenericResult(Model.Constants.Messages.ENTITY_UPDATED);
+        }
+
+        public virtual IQueryable<T> AsQueryable()
+        {
+            return _repository.AsQueryable();
         }
     }
 }

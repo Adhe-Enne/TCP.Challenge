@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace TCP.Model.Enums
+﻿namespace TCP.Model.Enums
 {
-   public enum InvoiceStatus
+    public enum InvoiceStatus
     {
         NEW,
         PENDING,
@@ -14,7 +8,7 @@ namespace TCP.Model.Enums
         ON_REVISION,
         APROVED,
         SENDED_TO_CLIENT,
-        OUTSTANDING,
+        PENDING_PAYMENT,
         PARCIAL_PAYMENT,
         FULL_PAYMENT,
         FINISHED,

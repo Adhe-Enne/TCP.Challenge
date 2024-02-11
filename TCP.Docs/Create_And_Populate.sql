@@ -16,6 +16,7 @@ CREATE TABLE [dbo].[Customer](
 	[Id] [INT] IDENTITY(1,1) NOT NULL,
 	[Name] [VARCHAR](50),
 	[Address] [VARCHAR](50),
+	[City] [VARCHAR](50),
 	[Email] [VARCHAR](50),
 	[Phone] [VARCHAR](50),
 	[Status] [INT] NOT NULL,
@@ -42,9 +43,9 @@ GO
 CREATE TABLE [dbo].[Client](
 	[Id] [INT] IDENTITY(1000,1) NOT NULL,
 	[CompanyName] [VARCHAR](50),
-	[CUIT] [VARCHAR](50),
-	[Adress] [VARCHAR](255),
-	[Phone] [VARCHAR](50),
+	[CUIT] [VARCHAR](20),
+	[Adress] [VARCHAR](50),
+	[Phone] [VARCHAR](20),
 	[Email] [VARCHAR](50),
 	[Disabled] [BIT],
 	[Status] [INT] NOT NULL,
@@ -105,3 +106,137 @@ CREATE TABLE [dbo].[ListOption](
 	[DateUpdated] [DATETIME]
 CONSTRAINT PK_ListOption PRIMARY KEY ([Id])
 )
+GO
+
+--select * from Client;
+--select * from Invoice;
+
+
+
+---UPDATE Client
+--SET Disabled = 1
+WHERE Id = 1000;
+select * from Client;
+select * from Invoice;
+select * from Product;
+select * from Customer;
+select * from ListOption;
+-- Inserts para la tabla Customer
+INSERT INTO [dbo].[Customer] ([Name], [Address], [City], [Email], [Phone], [Status], [DateAdded], [DateUpdated])
+VALUES
+('Fravega', 'Av Francisco Beiro 5763', 'Buenos Aires', 'Fravega@business.net', '123456789', 1, GETDATE(), GETDATE()),
+('Coto', 'Av Córdoba 1527','Entre Rios', 'Coto@business.net', '987654321', 1, GETDATE(), GETDATE()),
+('Compumundo', 'Santiago del Estero 2771','Chubut', 'Compumundo@business.net', '987654321', 1, GETDATE(), GETDATE()),
+('Jumbo', 'Sarmiento 329','Buenos Aires', 'Jumbo@business.net', '01153004000', 1, GETDATE(), GETDATE());
+
+-- Inserts para la tabla Product
+INSERT INTO [dbo].[Product] ([Price], [Code], [Description], [Status], [DateAdded], [DateUpdated])
+VALUES
+(999.99, 'T4K', 'Televisor 4k', 1, GETDATE(), GETDATE()),
+(899.99, 'PS4', 'PlayStation 4 Standard', 1, GETDATE(), GETDATE()),
+(899.99, 'XBOX1', 'XBox One', 1, GETDATE(), GETDATE()),
+(899.99, 'XBOXSX', 'XBox Series S', 1, GETDATE(), GETDATE()),
+(899.99, 'XBOXSS', 'XBox Series X', 1, GETDATE(), GETDATE()),
+(799.99, 'GRTX3070', 'GigaByte Rtx 3070 8GB', 1, GETDATE(), GETDATE()),
+(499.99, 'ARTX3050', 'Aorus Rtx 3050 2GB', 1, GETDATE(), GETDATE()),
+(1499.99, 'FRTX3090', 'Nvidia Founders Edition Rtx 3090 12GB', 1, GETDATE(), GETDATE()),
+(399.99, 'ASUSMB-B450', 'ASUS ROG MotherBoard B450', 1, GETDATE(), GETDATE()),
+(499.99, 'ASUSMON24', 'ASUS Monitor 24" 75hz', 1, GETDATE(), GETDATE()),
+(9.99, 'USBCABLE', 'Cable Usb 2.0 Standar', 1, GETDATE(), GETDATE()),
+(14.99, 'USBCABLEC', 'Cable Usb 3.0 C', 1, GETDATE(), GETDATE()),
+(29.99, 'USBCABLETB', 'Cable Usb 3.0 C ThunderBolt', 1, GETDATE(), GETDATE()),
+(29.99, 'PENDRV', 'Pendrive 24GB 3.0', 1, GETDATE(), GETDATE()),
+(29.99, 'CKEYBRD', 'Corsair Teclado Rgb', 1, GETDATE(), GETDATE()),
+(29.99, 'CMS', 'Corsair Mouse Rgb', 1, GETDATE(), GETDATE()),
+(149.99, 'CHEADPHN', 'Corsair Auriculares Overhead', 1, GETDATE(), GETDATE()),
+(29.99, 'MSPDXL', 'Mouse Pad Extra Large XL', 1, GETDATE(), GETDATE()),
+(29.99, 'FANRGB', 'Chasis Cooler Rgb', 1, GETDATE(), GETDATE()),
+(29.99, 'XBOX1JS', 'Xbox One Joystick', 1, GETDATE(), GETDATE()),
+(29.99, 'R7CPU', 'AMD Ryzen 7 5700', 1, GETDATE(), GETDATE()),
+(29.99, 'R5CPU', 'AMD Ryzen 5 5600x', 1, GETDATE(), GETDATE()),
+(29.99, 'R3CPU', 'AMD Ryzen 5 5200 APU', 1, GETDATE(), GETDATE()),
+(49.99, 'KDDR4', 'Kingston Memoria Ram DDR4 16Gb', 1, GETDATE(), GETDATE()),
+(1499.99, 'LGTV65', 'LG 65" 4K UHD Smart TV', 1, GETDATE(), GETDATE()),
+(399.99, 'NINSWITCH', 'Nintendo Switch Console', 1, GETDATE(), GETDATE()),
+(599.99, 'PS5', 'PlayStation 5 Console', 1, GETDATE(), GETDATE()),
+(299.99, 'LOGIMOUSE', 'Logitech Wireless Mouse', 1, GETDATE(), GETDATE()),
+(149.99, 'RZRGAMINGKB', 'Razer Gaming Keyboard', 1, GETDATE(), GETDATE()),
+(79.99, 'SEAGATE1TB', 'Seagate 1TB External HDD', 1, GETDATE(), GETDATE()),
+(129.99, 'CORSHEADOSET', 'Corsair Gaming Headset', 1, GETDATE(), GETDATE()),
+(699.99, 'EVGARTX3080', 'EVGA GeForce RTX 3080', 1, GETDATE(), GETDATE()),
+(129.99, 'RZRMAMBA', 'Razer Mamba Elite Gaming Mouse', 1, GETDATE(), GETDATE()),
+(799.99, 'AMDR93900X', 'AMD Ryzen 9 3900X CPU', 1, GETDATE(), GETDATE()),
+(59.99, 'HPPRINTER', 'HP OfficeJet Pro Printer', 1, GETDATE(), GETDATE()),
+(199.99, 'SAMSUNGSSD1TB', 'Samsung 1TB SSD', 1, GETDATE(), GETDATE()),
+(399.99, 'ASUSROG144HZ', 'ASUS ROG 27" 144Hz Gaming Monitor', 1, GETDATE(), GETDATE()),
+(79.99, 'HYPERXRAM16GB', 'HyperX 16GB DDR4 RAM', 1, GETDATE(), GETDATE()),
+(199.99, 'BEATSHEADPHONES', 'Beats Wireless Headphones', 1, GETDATE(), GETDATE()),
+(299.99, 'NZXTCASE', 'NZXT H510 Compact ATX Mid-Tower Case', 1, GETDATE(), GETDATE()),
+(149.99, 'MICROSOFTOFFICE', 'Microsoft Office 365', 1, GETDATE(), GETDATE()),
+(89.99, 'LOGITECHWEBCAM', 'Logitech HD Pro Webcam', 1, GETDATE(), GETDATE()),
+(49.99, 'TPLINKROUTER', 'TP-Link AC1750 Smart WiFi Router', 1, GETDATE(), GETDATE()),
+(349.99, 'CORSAIRRGBFANS', 'Corsair LL120 RGB Fans (3-Pack)', 1, GETDATE(), GETDATE()),
+(899.99, 'ASUSROGSTRIX3080', 'ASUS ROG Strix GeForce RTX 3080', 1, GETDATE(), GETDATE()),
+(449.99, 'NVIDIARTX3060TI', 'Nvidia GeForce RTX 3060 Ti', 1, GETDATE(), GETDATE()),
+(149.99, 'ASUSPRIMEB550', 'ASUS Prime B550-Plus Motherboard', 1, GETDATE(), GETDATE()),
+(249.99, 'NVIDIAGTX1660SUPER', 'Nvidia GeForce GTX 1660 Super', 1, GETDATE(), GETDATE()),
+(129.99, 'ASUSVG278Q', 'ASUS VG278Q 27" Full HD Gaming Monitor', 1, GETDATE(), GETDATE()),
+(69.99, 'NVIDIAQUADROK4000', 'Nvidia Quadro K4000 Professional Graphics', 1, GETDATE(), GETDATE()),
+(299.99, 'ASUSROGTHOR850W', 'ASUS ROG Thor 850W Platinum Power Supply', 1, GETDATE(), GETDATE()),
+(119.99, 'NVIDIAGTX1050', 'Nvidia GeForce GTX 1050', 1, GETDATE(), GETDATE()),
+(79.99, 'ASUSCERBERUS', 'ASUS Cerberus Gaming Mouse', 1, GETDATE(), GETDATE()),
+(399.99, 'NVIDIARTX3070', 'Nvidia GeForce RTX 3070 Founders Edition', 1, GETDATE(), GETDATE()),
+(199.99, 'ASUSROGSTRIXB550', 'ASUS ROG Strix B550-F Gaming Motherboard', 1, GETDATE(), GETDATE()),
+(149.99, 'NVIDIAQUADRORTX6000', 'Nvidia Quadro RTX 6000', 1, GETDATE(), GETDATE()),
+(599.99, 'ASUSROGSTRIXRX6800XT', 'ASUS ROG Strix Radeon RX 6800 XT', 1, GETDATE(), GETDATE()),
+(79.99, 'NVIDIAGT1030', 'Nvidia GeForce GT 1030', 1, GETDATE(), GETDATE()),
+(149.99, 'ASUSPRIMEZ390A', 'ASUS Prime Z390-A Motherboard', 1, GETDATE(), GETDATE()),
+(249.99, 'NVIDIARTX2080SUPER', 'Nvidia GeForce RTX 2080 Super', 1, GETDATE(), GETDATE()),
+(129.99, 'ASUSROGSTRIXIMPACT', 'ASUS ROG Strix Impact Gaming Mouse', 1, GETDATE(), GETDATE()),
+(399.99, 'NVIDIARTX3080TI', 'Nvidia GeForce RTX 3080 Ti', 1, GETDATE(), GETDATE()),
+(199.99, 'ASUSROGSTRIXX570', 'ASUS ROG Strix X570-E Gaming Motherboard', 1, GETDATE(), GETDATE()),
+(149.99, 'NVIDIAGTX1660', 'Nvidia GeForce GTX 1660', 1, GETDATE(), GETDATE());
+
+-- Inserts para la tabla ListOption
+INSERT INTO [dbo].[ListOption] ([OptionType], [Code], [Name], [Description], [Status], [DateAdded], [DateUpdated])
+VALUES
+('InvoiceStatus', 'NEW', 'Nuevo', 'Factura Nueva', 1, GETDATE(), GETDATE()),
+('InvoiceStatus', 'PENDING', 'Pendiente ', 'Procesamiento Pendiente', 1, GETDATE(), GETDATE()),
+('InvoiceStatus', 'ON_PROCESS', 'Nuevo', 'Factura Siendo Procesada', 1, GETDATE(), GETDATE()),
+('InvoiceStatus', 'ON_REVISION', 'Nuevo', 'Factura en Revision por departamente Interno', 1, GETDATE(), GETDATE()),
+('InvoiceStatus', 'APROVED', 'Nuevo', 'Factura Aprovada Con Exito', 1, GETDATE(), GETDATE()),
+('InvoiceStatus', 'SENDED_TO_CLIENT', 'Nuevo', 'Copia de Factura enviada al Cliente', 1, GETDATE(), GETDATE()),
+('InvoiceStatus', 'PENDING_PAYMENT', 'Nuevo', 'Pago de Factura Pendiente', 1, GETDATE(), GETDATE()),
+('InvoiceStatus', 'PARCIAL_PAYMENT', 'Nuevo', 'Factura Pagada Parcialmente', 1, GETDATE(), GETDATE()),
+('InvoiceStatus', 'FULL_PAYMENT', 'Nuevo', 'Factura Pagada', 1, GETDATE(), GETDATE()),
+('InvoiceStatus', 'FINISHED', 'Nuevo', 'Factura Finalizada', 1, GETDATE(), GETDATE()),
+('InvoiceStatus', 'EXPIRED', 'Nuevo', 'Factura Vencida', 1, GETDATE(), GETDATE()),
+('InvoiceStatus', 'REJECTED', 'Nuevo', 'Factura Rechazada (Contante Atencion al cliente)', 1, GETDATE(), GETDATE()),
+('InvoiceStatus', 'CANCELED', 'Nuevo', 'Factura Cancelada', 1, GETDATE(), GETDATE()),
+('PaymentMethod', 'CASH', 'Efectivo', 'Pago mediante dinero en Efectivo', 1, GETDATE(), GETDATE()),
+('PaymentMethod', 'DEBIT', 'Debito', 'Pago mediante tarjeta de Debito', 1, GETDATE(), GETDATE()),
+('PaymentMethod', 'CREDIT', 'Credito', 'Pago mediante tarjeta de Credito', 1, GETDATE(), GETDATE()),
+('PaymentMethod', 'CUOTES', 'Cuotas', 'Pago en financiamiento de Cuotas', 1, GETDATE(), GETDATE()),
+('PaymentMethod', 'TRANSFER', 'Transferencia', 'Pago con transferencia Bancaria', 1, GETDATE(), GETDATE()),
+('PaymentMethod', 'VIRTUAL_PAY', 'Billetera Virtual', 'Pago mediante billetera virtual (MP, Uala, Brubank. Etc)', 1, GETDATE(), GETDATE());
+
+-- Inserts para la tabla Client
+INSERT INTO [dbo].[Client] ([CompanyName], [CUIT], [Adress], [Phone], [Email], [Disabled], [Status], [DateAdded], [DateUpdated])
+VALUES
+('Client1', '12345678901', 'ClientAddress1', '111111111', 'client1@example.com', 0, 1, GETDATE(), GETDATE()),
+('Client2', '98765432101', 'ClientAddress2', '222222222', 'client2@example.com', 0, 1, GETDATE(), GETDATE());
+
+-- Inserts para la tabla Invoice
+INSERT INTO [dbo].[Invoice] ([ClientId], [CustomerId], [TotalQty], [TotalAmount], [PaymentMethod], [Status], [InvoiceStatus], [DateAdded], [DateUpdated], [DueDate])
+VALUES
+(1000, 1, 5, 99.95, 1, 1, 1, GETDATE(), GETDATE(), DATEADD(DAY, 30, GETDATE())),
+(1000, 1, 3, 59.97, 2, 1, 1, GETDATE(), GETDATE(), DATEADD(DAY, 45, GETDATE()));
+
+-- Inserts para la tabla Invoice_Detail
+INSERT INTO [dbo].[Invoice_Detail] ([InvoiceId], [ProductId], [Qty], [UnitPrice], [LineAmount], [Status], [DateAdded], [DateUpdated])
+VALUES
+(2003, 1, 2, 19.99, 39.98, 1, GETDATE(), GETDATE()),
+(2003, 2, 3, 29.99, 89.97, 1, GETDATE(), GETDATE()),
+(2004, 1, 1, 19.99, 19.99, 1, GETDATE(), GETDATE()),
+(2004, 2, 2, 29.99, 59.98, 1, GETDATE(), GETDATE());
+

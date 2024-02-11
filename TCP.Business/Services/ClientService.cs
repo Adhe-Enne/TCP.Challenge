@@ -1,36 +1,39 @@
 ﻿using Core.Abstractions;
 using Core.Framework;
-using FluentValidation;
-using FluentValidation.Results;
-using TCP.Model.Entities;
+using TCP.Business.Extensions;
+using TCP.Business.Interfaces;
 using TCP.Model.Constants;
-using TCP.Model.Enums;
+using TCP.Model.Entities;
 
 namespace TCP.Business.Services
 {
-    public class ClientService : Service<Client>, IServiceCrud<Client>
+    public class ClientService : Service<Client>
     {
-        public ClientService(IRepository<Client> repository, IValidator<Client> validator)
-            : base(repository, validator)
+        IValidatorStrategy<Client> _validatorStrategy;
+        public ClientService(IRepository<Client> repository, IValidatorStrategy<Client> validator)
+            : base(repository)
         {
+            _validatorStrategy = validator;
         }
 
-        public IGenericResult Insert(Client entity)
+        public override IGenericResult Insert(Client entity)
         {
-            bool cuitExists = _repository.AsQueryable().Any(x=> x.CUIT == entity.CUIT);
+            bool cuitExists = _repository.AsQueryable().Any(x => x.CUIT == entity.CUIT);
 
             if (cuitExists)
                 throw new TcpException(Messages.CUIT_EXISTS);
 
-            Validate(entity);
+            entity.Disabled = entity.IsDistributor();
+            _validatorStrategy.ValidateFields(entity);
+
             _repository.Insert(entity);
 
             return new GenericResult(Messages.ENTITY_INSERTED);
         }
 
-        public IGenericResult Update(Client entity)
+        public override IGenericResult Update(Client entity)
         {
-            bool cuitExist = _repository.AsQueryable().Any(x => x.CUIT == entity.CUIT && x.Id != entity.Id);
+            bool cuitExist = _repository.AsQueryable().Any( x =>x.CUIT == entity.CUIT && x.Id != entity.Id);
 
             if (cuitExist)
                 throw new TcpException(Messages.CUIT_EXISTS);
@@ -40,13 +43,16 @@ namespace TCP.Business.Services
             if (toUpdate is null)
                 throw new TcpException(Messages.CLIENT_UNFOUND);
 
+            if (toUpdate.Status == Model.Enums.MainStatus.DELETED || toUpdate.Disabled == true)
+                throw new TcpException(Messages.CLIENT_INVALID);
+
             toUpdate.CompanyName = entity.CompanyName;
+            toUpdate.Phone = entity.Phone;
+            toUpdate.Email = entity.Email;
             toUpdate.Adress = entity.Adress;
+            toUpdate.Disabled = entity.IsDistributor();
 
-            if (entity.CompanyName.StartsWith(Constants.KeyName.DISTRIBUTOR))
-                toUpdate.Disabled = true;
-
-            this.Validate(entity);
+            _validatorStrategy.ValidateFields(entity);
 
             _repository.Update(toUpdate);
             return new GenericResult(Messages.ENTITY_UPDATED);

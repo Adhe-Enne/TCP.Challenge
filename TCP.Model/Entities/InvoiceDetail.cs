@@ -9,6 +9,7 @@ namespace TCP.Model.Entities
         public InvoiceDetail()
         {
             DateAdded = DateTime.Now;
+            DateUpdated = DateTime.Now;
         }
 
         public int Id { get; set; }

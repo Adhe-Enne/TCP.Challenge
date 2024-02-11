@@ -12,11 +12,11 @@ namespace TCP.Api.Controllers
     [Route("api/[controller]")]
     public class ClientController : BaseController
     {
-        IServiceCrud<Client> _clientService;
+        IService<Client> _clientService;
 
         public ClientController(
             IMapper mapper,
-            IServiceCrud<Client> serviceCrud
+            IService<Client> serviceCrud
             ) : base(
                 mapper
                 )
@@ -31,20 +31,16 @@ namespace TCP.Api.Controllers
 
             try
             {
-                IEnumerable<Client> src = _clientService.GetAll();
+                IEnumerable<Client> src = _clientService.Filter(x => x.Disabled == false && x.Status == Model.Enums.MainStatus.ACTIVE).ToList();
                 response.Data = _mapper.Map<IEnumerable<ClientDto>>(src);
+
+                if (response.TotalRecords == 0)
+                    HttpContext.Response.StatusCode = (int)HttpStatusCode.NoContent;
             }
             catch (Exception ex)
             {
                 response.Set(HandleException(ex));
                 HttpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-            }
-            finally
-            {
-                response.TotalRecords = response.Data.Count();
-
-                if (response.TotalRecords == 0)
-                    HttpContext.Response.StatusCode = (int)HttpStatusCode.NoContent;
             }
 
             return response;
@@ -68,34 +64,33 @@ namespace TCP.Api.Controllers
             return GetAllByRequest(clientDto);
         }
 
-        [HttpGet("byrequest")]
-        public IGridResult<ClientDto> GetAllByRequest(ClientRequest request)
+        private IGridResult<ClientDto> GetAllByRequest(ClientRequest request)
         {
             IGridResult<ClientDto> response = new GridResult<ClientDto>();
 
             try
             {
-                IEnumerable<Client> src = _clientService.Filter(x => x.CompanyName == request.Company || x.CUIT == request.Cuit);
+                IEnumerable<Client> src = _clientService.Filter(x => 
+                (x.CompanyName == request.Company || x.CUIT == request.Cuit) 
+                && x.Disabled == false && x.Status == Model.Enums.MainStatus.ACTIVE
+                );
+
                 response.Data = _mapper.Map<IEnumerable<ClientDto>>(src);
+
+                if (response.TotalRecords == 0)
+                    HttpContext.Response.StatusCode = (int)HttpStatusCode.NoContent;
             }
             catch (Exception ex)
             {
                 response.Set(HandleException(ex));
                 HttpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
             }
-            finally
-            {
-                response.TotalRecords = response.Data.Count();
-
-                if (response.TotalRecords == 0)
-                    HttpContext.Response.StatusCode = (int)HttpStatusCode.NoContent;
-            }
 
             return response;
         }
 
         [HttpPost]
-        public IGenericResult Insert([FromBody] ClientDto entity)
+        public IGenericResult Insert([FromBody] ClientCreateDto entity)
         {
             LogInfo(Model.Constants.Messages.ENTITY_INSERT, entity);
             IGenericResult result = new GenericResult();

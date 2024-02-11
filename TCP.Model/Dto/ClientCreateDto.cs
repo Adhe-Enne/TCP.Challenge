@@ -1,8 +1,13 @@
-﻿namespace TCP.Model.Dto
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace TCP.Model.Dto
 {
-    public class ClientDto
+    public class ClientCreateDto
     {
-        public int Id { get; set; }
         public string? CompanyName { get; set; }
         public string? CUIT { get; set; }
         public string? Adress { get; set; }

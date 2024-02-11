@@ -2,7 +2,7 @@
 using TCP.Model.Dto;
 using TCP.Model.Entities;
 
-namespace TCP.Api.Profiles
+namespace TCP.MapperLayer.Profiles
 {
     public class ClientProfile : Profile
     {

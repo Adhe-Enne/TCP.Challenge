@@ -1,6 +1,6 @@
 ﻿namespace TCP.Model.Dto
 {
-    public class InvoiceDto
+    public class InvoiceHeadDto
     {
         public int Id { get; set; }
         public int ClientId { get; set; }
@@ -24,6 +24,5 @@
 
         public decimal TotalAmount { get; set; }
         public decimal TotalQty { get; set; }
-        public ICollection<InvoiceDetailDto> Detail { get; set; }
     }
 }

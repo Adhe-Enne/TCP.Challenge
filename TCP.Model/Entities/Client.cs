@@ -9,7 +9,6 @@ namespace TCP.Model.Entities
         public Client()
         {
             Invoices = new HashSet<Invoice>();
-
         }
 
         public int Id { get; set; }

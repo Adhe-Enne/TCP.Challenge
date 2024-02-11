@@ -2,7 +2,7 @@
 {
     public enum PaymentMethod
     {
-        EFECTIVE = 1,
+        CASH,
         DEBIT,
         CREDIT,
         CUOTES,

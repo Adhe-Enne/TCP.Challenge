@@ -12,6 +12,7 @@ namespace TCP.Model.Constants
         public const string ENTITY_UNFOUND = "¡No se encontro registro en la base de Datos!";
         public const string INVOICE_UNFOUND = "¡No se encontro Factura en la base de Datos!";
         public const string CLIENT_UNFOUND = "¡No se encontro Cliente en la base de Datos!";
+        public const string CLIENT_INVALID = "¡El Cliente se encuentra Deshabilitado/Eliminado!";
         public const string PROD_UNFOUND = "¡No se encontro Producto en la base de Datos!";
         public const string ENTITY_ERROR_VALIDATE = "¡Se detectaron datos invalidos!";
 
@@ -20,6 +21,7 @@ namespace TCP.Model.Constants
                     
 
         //Common const
+        public const string NO_ENTITIES = "No se encontraron registros en el Sistema";
         public const string CUIT_EXISTS = "El Cuit ingresado ya existe en el sistema";
         public const string ENTITY_INSERT = "Insertando Nuevo Registro";
         public const string ENTITY_INSERTED = "¡Registro Guardado con Exito!";

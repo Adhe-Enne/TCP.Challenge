@@ -72,16 +72,13 @@ namespace TCP.Repository
         {
             DateTime timestamp = DateTime.Now;
 
-            if (entity is IDatetimeManaged)
+            if (entity is IDatetimeManaged audit)
             {
-                var audit = (IDatetimeManaged)entity;
                 audit.DateAdded = timestamp;
                 audit.DateUpdated = timestamp;
             }
 
-
             _ctx.Set<T>().Add(entity);
-
             _ctx.SaveChanges();
         }
 
@@ -89,9 +86,8 @@ namespace TCP.Repository
         {
             DateTime timestamp = DateTime.Now;
 
-            if (entity is IDatetimeManaged)
+            if (entity is IDatetimeManaged audit)
             {
-                var audit = (IDatetimeManaged)entity;
                 audit.DateUpdated = timestamp;
             }
 
@@ -107,9 +103,8 @@ namespace TCP.Repository
 
             foreach (var e in entities)
             {
-                if (e is IDatetimeManaged)
+                if (e is IDatetimeManaged audit)
                 {
-                    var audit = (IDatetimeManaged)e;
                     audit.DateAdded = timestamp;
                     audit.DateUpdated = timestamp;
                 }
@@ -126,7 +121,7 @@ namespace TCP.Repository
             {
                 if (e is IDatetimeManaged)
                 {
-                    var audit = (IDatetimeManaged)e;
+                    IDatetimeManaged audit = (IDatetimeManaged)e;
                     audit.DateUpdated = timestamp;
                 }
 
