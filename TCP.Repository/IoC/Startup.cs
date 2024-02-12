@@ -1,6 +1,9 @@
 ﻿using Core.Abstractions;
 using Microsoft.Extensions.DependencyInjection;
 using TCP.Model.Entities;
+using TCP.Model.ViewSp;
+using TCP.Repository.Interfaces;
+using TCP.Repository.Repository;
 
 namespace TCP.Repository.IoC
 {
@@ -8,6 +11,7 @@ namespace TCP.Repository.IoC
     {
         public static void AddRepository(this IServiceCollection services)
         {
+            services.AddScoped(typeof(IRepositorySql<InvoiceClientBestSell>), typeof(RepositorySql<InvoiceClientBestSell>));
             services.AddScoped(typeof(IRepository<Client>), typeof(Repository<Client>));
             services.AddScoped(typeof(IRepository<Product>), typeof(Repository<Product>));
             services.AddScoped(typeof(IRepository<ListOption>), typeof(Repository<ListOption>));

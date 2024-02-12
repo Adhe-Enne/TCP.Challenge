@@ -17,9 +17,10 @@ namespace TCP.Api.Controllers
     [Route("/api/[controller]")]
     public class InvoicerController : BaseController
     {
-        IService<Invoice> _invoiceService;
-        IService<InvoiceDetail> _invoiceDetailService;
-        IService<ListOption> _listOptionService;
+        readonly IService<Invoice> _invoiceService;
+        readonly IService<InvoiceDetail> _invoiceDetailService;
+        readonly IService<ListOption> _listOptionService;
+
         public InvoicerController(
             IMapper mapper,
             IService<Invoice> serviceCrud,
@@ -46,7 +47,7 @@ namespace TCP.Api.Controllers
 
             try
             {
-                IEnumerable<Invoice> entities = _invoiceService.AsQueryable();
+                IEnumerable<Invoice> entities = _invoiceService.AsQueryable().Where(x => x.Status == MainStatus.ACTIVE);
 
                 if (!entities.Any())
                 {
@@ -72,7 +73,7 @@ namespace TCP.Api.Controllers
         [HttpGet("InvoiceCode/{InvoiceCode}")]
         public IGridResult<InvoiceDto> GetByCompany(int invoicecode)
         {
-            InvoiceRequest InvoiceDto = new InvoiceRequest();
+            InvoiceRequest InvoiceDto = new ();
             InvoiceDto.InvoiceCode = invoicecode;
 
             return GetAll(InvoiceDto);
@@ -82,7 +83,7 @@ namespace TCP.Api.Controllers
 
         public IGridResult<InvoiceDto> GetByCuit(int clientid)
         {
-            InvoiceRequest InvoiceDto = new InvoiceRequest();
+            InvoiceRequest InvoiceDto = new ();
             InvoiceDto.ClientId = clientid;
 
             return GetAll(InvoiceDto);

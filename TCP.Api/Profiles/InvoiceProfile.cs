@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using TCP.Business.Constants;
 using TCP.Model.Constants;
 using TCP.Model.Dto;
 using TCP.Model.Entities;
@@ -40,22 +41,22 @@ namespace TCP.Api.Profiles
             //    .ForMember(dest => dest.sta)
                 .ForMember(dest => dest.InvoiceStatus, opt =>
                 {
-                    opt.PreCondition(s => s.OptionType.Equals(KeyName.INVOICE_STATUS));
+                    opt.PreCondition(s => s.OptionType.Equals(KeyBusiness.INVOICE_STATUS));
                     opt.MapFrom(src => src.Name);
                 })
                 .ForMember(dest => dest.StatusDescription, opt =>
                 {
-                    opt.PreCondition(s => s.OptionType.Equals(KeyName.INVOICE_STATUS));
+                    opt.PreCondition(s => s.OptionType.Equals(KeyBusiness.INVOICE_STATUS));
                     opt.MapFrom(src => src.Description);
                 })
                 .ForMember(dest => dest.PaymentMethod, opt =>
                 {
-                    opt.PreCondition(s => s.OptionType.Equals(KeyName.PAYMENT_METHOD));
+                    opt.PreCondition(s => s.OptionType.Equals(KeyBusiness.PAYMENT_METHOD));
                     opt.MapFrom(src => src.Name);
                 })
                 .ForMember(dest => dest.PaymentDescription, opt =>
                 {
-                    opt.PreCondition(s => s.OptionType.Equals(KeyName.PAYMENT_METHOD));
+                    opt.PreCondition(s => s.OptionType.Equals(KeyBusiness.PAYMENT_METHOD));
                     opt.MapFrom(src => src.Description);
                 });
         }

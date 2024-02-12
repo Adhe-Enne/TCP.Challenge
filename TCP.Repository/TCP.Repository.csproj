@@ -7,6 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Dapper" Version="2.1.28" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\..\Adhe.Core\Core.Abstractions\Core.Abstractions.csproj" />
     <ProjectReference Include="..\TCP.DbContext\TCP.DataBaseContext.csproj" />
   </ItemGroup>

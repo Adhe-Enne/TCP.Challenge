@@ -13,21 +13,21 @@ namespace TCP.Api.Profiles
     {
         public static IEnumerable<InvoiceDto> MapInvoiceDto(IEnumerable<Invoice> entities, IQueryable<ListOption> listOptions, IMapper mapper)
         {
-            List<InvoiceDto> data = new List<InvoiceDto>();
+            List<InvoiceDto> data = new ();
             ListOption? option;
             InvoiceDto? dto;
 
             foreach (var entity in entities)
             {
                 dto = mapper.Map<InvoiceDto>(entity);
-                option = listOptions.FirstOrDefault(x => x.OptionType == KeyName.INVOICE_STATUS && x.Code == entity.InvoiceStatus.ToString());
+                option = listOptions.FirstOrDefault(x => x.OptionType == KeyBusiness.INVOICE_STATUS && x.Code == entity.InvoiceStatus.ToString());
 
                 if (option is null) continue;
 
                 data.Add(dto);
                 mapper.Map(option, dto);
 
-                option = listOptions.FirstOrDefault(x => x.OptionType == KeyName.PAYMENT_METHOD && x.Code == entity.PaymentMethod.ToString());
+                option = listOptions.FirstOrDefault(x => x.OptionType == KeyBusiness.PAYMENT_METHOD && x.Code == entity.PaymentMethod.ToString());
 
                 if (option is null) continue;
 

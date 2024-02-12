@@ -12,7 +12,7 @@ namespace TCP.Api.Controllers
     [Route("api/[controller]")]
     public class ClientController : BaseController
     {
-        IService<Client> _clientService;
+        readonly IService<Client> _clientService;
 
         public ClientController(
             IMapper mapper,
@@ -49,7 +49,7 @@ namespace TCP.Api.Controllers
         [HttpGet("company/{company}")]
         public IGridResult<ClientDto> GetByCompany(string company)
         {
-            ClientRequest clientDto = new ClientRequest();
+            ClientRequest clientDto = new ();
             clientDto.Company = company;
             return GetAllByRequest(clientDto);
         }
@@ -58,7 +58,7 @@ namespace TCP.Api.Controllers
 
         public IGridResult<ClientDto> GetByCuit(string cuit)
         {
-            ClientRequest clientDto = new ClientRequest();
+            ClientRequest clientDto = new ();
             clientDto.Cuit = cuit;
 
             return GetAllByRequest(clientDto);

@@ -119,6 +119,7 @@ WHERE Id = 1000;
 select * from Client;
 select * from Invoice;
 select * from Product;
+select * from Invoice_Detail;
 select * from Customer;
 select * from ListOption;
 -- Inserts para la tabla Customer

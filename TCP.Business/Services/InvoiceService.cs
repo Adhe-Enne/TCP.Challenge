@@ -55,7 +55,7 @@ namespace TCP.Business.Services
             entity.TotalAmount = entity.Detail.Sum(x => x.LineAmount);
             entity.TotalQty = entity.Detail.Sum(x => x.Qty);
             entity.InvoiceStatus = Model.Enums.InvoiceStatus.NEW;
-            entity.DueDate = DateTime.Now.AddDays(Constants.KeyName.INVOICES_DUETIME);
+            entity.DueDate = DateTime.Now.AddDays(Constants.KeyBusiness.INVOICES_DUETIME);
 
             _validator.ValidateFields(entity);
 

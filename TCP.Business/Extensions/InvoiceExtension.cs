@@ -4,7 +4,7 @@
     {
         public static bool IsDistributor(this Model.Entities.Client entity)
         {
-            return entity.CompanyName.StartsWith(Constants.KeyName.DISTRIBUTOR);
+            return entity.CompanyName.StartsWith(Constants.KeyBusiness.DISTRIBUTOR);
         }
     }
 }

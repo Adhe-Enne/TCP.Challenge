@@ -5,9 +5,10 @@ using TCP.Model.Constants;
 
 namespace TCP.Business.Strategy
 {
+    // Para nada es un Strategy, pero dejamos abierta la opcion de implementarse como tal considerando escalabilidad.
     public class ValidatorStrategy<T> : IValidatorStrategy<T> where T : class, Core.Abstractions.IEntity
     {
-        private IValidator<T> _validator;
+        private readonly IValidator<T> _validator;
         public ValidatorStrategy(IValidator<T> validator)
         {
             _validator = validator;

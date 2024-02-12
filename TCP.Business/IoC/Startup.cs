@@ -1,5 +1,4 @@
-﻿
-using Core.Abstractions;
+﻿using Core.Abstractions;
 using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 using TCP.Business.Interfaces;
@@ -27,6 +26,8 @@ namespace TCP.Business.IoC
             services.AddScoped(typeof(IService<Product>), typeof(Service<Product>));
             services.AddScoped(typeof(IService<ListOption>), typeof(Service<ListOption>));
 
+            //Custom
+            services.AddScoped(typeof(IBonusService), typeof(BonusService));
         }
     }
 }

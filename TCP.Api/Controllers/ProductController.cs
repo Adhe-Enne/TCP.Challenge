@@ -15,7 +15,7 @@ namespace TCP.Api.Controllers
     [Route("api/[controller]")]
     public class ProductController : BaseController
     {
-        IService<Product> _service;
+        readonly IService<Product> _service;
         public ProductController(IMapper mapper, IService<Product> service) : base(mapper)
         {
             _service = service;

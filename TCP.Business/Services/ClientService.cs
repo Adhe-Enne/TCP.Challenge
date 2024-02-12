@@ -9,7 +9,7 @@ namespace TCP.Business.Services
 {
     public class ClientService : Service<Client>
     {
-        IValidatorStrategy<Client> _validatorStrategy;
+        readonly IValidatorStrategy<Client> _validatorStrategy;
         public ClientService(IRepository<Client> repository, IValidatorStrategy<Client> validator)
             : base(repository)
         {

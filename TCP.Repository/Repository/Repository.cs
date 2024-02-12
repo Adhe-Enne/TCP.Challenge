@@ -145,5 +145,14 @@ namespace TCP.Repository
         {
             return _ctx.Database.ExecuteSqlRaw(query, parameters);
         }
+
+        public IEnumerable<T> ExecuteStoredProcedure(string storedProcedureName, params object[] parameters)
+        {
+            var parameterNames = Enumerable.Range(0, parameters.Length).Select(i => $"@p{i}").ToArray();
+            var parameterList = string.Join(", ", parameterNames);
+            var query = $"EXEC {storedProcedureName} {parameterList}";
+
+            return _ctx.Set<T>().FromSqlRaw(query, parameters);
+        }
     }
 }

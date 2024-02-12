@@ -17,6 +17,7 @@ builder.Services.AddMemoryCache();
 builder.Services.AddAutoMapper(typeof(Program));
 
 Log.Information("Inicializando FacturadorDB.");
+
 //cors publico
 builder.Services.AddCors(options =>
 {
@@ -40,8 +41,6 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
-app.UseAuthorization();
 app.UseCors(MyAllowSpecificOrigins);
 app.MapControllers();
 app.UseDefaultFiles();
