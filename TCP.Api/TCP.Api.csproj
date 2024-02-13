@@ -19,4 +19,8 @@
     <ProjectReference Include="..\TCP.Business\TCP.Business.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Logs\" />
+  </ItemGroup>
+
 </Project>

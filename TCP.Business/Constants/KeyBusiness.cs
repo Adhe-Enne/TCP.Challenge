@@ -18,5 +18,14 @@
         public const string SP_PARAM_DATETO= "@FechaHasta";
         public const string SP_PARAM_CLIENTID= "@IdCliente";
         public const string SP_EXEC= "EXEC";
+        public const string SQL_SELECT= "SELECT * FROM";
+
+        public const string EXPORT_PATH= @"C:\TCP Files\OUT\";
+        public const string EXPORT_EXTENSION= "txt";
+        public const string EXPORT_NAME= "LOG_SP_EXECUTED";
+
+        public const string EXPORT_LOG_SP= "Store Procedure Executed";
+        public const string EXPORT_LOG_TIME= "Time";
+        public const string EXPORT_LOG_RECORDS= "Records Found";
     }
 }

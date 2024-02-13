@@ -15,6 +15,7 @@
     <ProjectReference Include="..\..\Adhe.Core\Core.Abstractions\Core.Abstractions.csproj" />
     <ProjectReference Include="..\..\Adhe.Core\Core.Externals\Core.Externals.csproj" />
     <ProjectReference Include="..\..\Adhe.Core\Core.Framework\Core.Framework.csproj" />
+    <ProjectReference Include="..\Invoicer\Invoicer.csproj" />
     <ProjectReference Include="..\TCP.Repository\TCP.Repository.csproj" />
   </ItemGroup>
 

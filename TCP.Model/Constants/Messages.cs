@@ -10,6 +10,7 @@
         public const string PROD_UNFOUND = "¡No se encontro Producto en la base de Datos!";
         public const string ENTITY_ERROR_VALIDATE = "¡Se detectaron datos invalidos!";
         public const string QUERY_INVALID = "¡No se encontro Consulta!";
+        public const string SP_INVALID = "¡Error al Ejecutar Store Procedure!";
 
         //Success const
         public const string CREATE_SUCCESS = "¡Registro creado con exito!";

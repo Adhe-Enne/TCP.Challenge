@@ -26,18 +26,6 @@ namespace TCP.Repository
             return _ctx.Set<T>().AsQueryable();
         }
 
-        public IEnumerable<T> GetAll(params Expression<Func<T, object>>[] includeProperties)
-        {
-            IQueryable<T> query = AsQueryable();
-            return PerformInclusions(includeProperties, query);
-        }
-
-        public IEnumerable<T> GetAll()
-        {
-            IQueryable<T> query = AsQueryable();
-            return query;
-        }
-
         public IEnumerable<T> Filter(Expression<Func<T, bool>> where, params Expression<Func<T, object>>[] includeProperties)
         {
             IQueryable<T> query = AsQueryable();
@@ -60,14 +48,7 @@ namespace TCP.Repository
 
             _ctx.SaveChanges();
         }
-        public void Delete(IEnumerable<T> entities)
-        {
-            foreach (var e in entities)
-            {
-                _ctx.Entry(e).State = EntityState.Deleted;
-            }
-            _ctx.SaveChanges();
-        }
+
         public void Insert(T entity)
         {
             DateTime timestamp = DateTime.Now;
@@ -96,63 +77,6 @@ namespace TCP.Repository
 
             _ctx.SaveChanges();
         }
-
-        public void Insert(IEnumerable<T> entities)
-        {
-            DateTime timestamp = DateTime.Now;
-
-            foreach (var e in entities)
-            {
-                if (e is IDatetimeManaged audit)
-                {
-                    audit.DateAdded = timestamp;
-                    audit.DateUpdated = timestamp;
-                }
-
-                _ctx.Entry(e).State = EntityState.Added;
-            }
-        }
-
-        public void Update(IEnumerable<T> entities)
-        {
-            DateTime timestamp = DateTime.Now;
-
-            foreach (var e in entities)
-            {
-                if (e is IDatetimeManaged)
-                {
-                    IDatetimeManaged audit = (IDatetimeManaged)e;
-                    audit.DateUpdated = timestamp;
-                }
-
-                _ctx.Entry(e).State = EntityState.Modified;
-            }
-        }
-
-        public void PartialUpdate(T t, params Expression<Func<T, object>>[] properties)
-        {
-            var entry = _ctx.Entry(t);
-            foreach (var p in properties) entry.Property(p).IsModified = true;
-        }
         #endregion
-
-        public IEnumerable<T> SqlQuery(string query, params dynamic[] parameters)
-        {
-            return _ctx.Set<T>().FromSqlRaw(query, parameters);
-        }
-
-        public int ExecuteSqlCommand(string query, params dynamic[] parameters)
-        {
-            return _ctx.Database.ExecuteSqlRaw(query, parameters);
-        }
-
-        public IEnumerable<T> ExecuteStoredProcedure(string storedProcedureName, params object[] parameters)
-        {
-            var parameterNames = Enumerable.Range(0, parameters.Length).Select(i => $"@p{i}").ToArray();
-            var parameterList = string.Join(", ", parameterNames);
-            var query = $"EXEC {storedProcedureName} {parameterList}";
-
-            return _ctx.Set<T>().FromSqlRaw(query, parameters);
-        }
     }
 }

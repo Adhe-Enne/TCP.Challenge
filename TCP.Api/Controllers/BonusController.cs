@@ -3,6 +3,7 @@ using Core.Abstractions;
 using Core.Framework;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
+using System.Runtime.InteropServices;
 using TCP.Business.Enums;
 using TCP.Business.Interfaces;
 using TCP.Model.Dto;
@@ -16,12 +17,12 @@ namespace TCP.Api.Controllers
     {
         readonly IService<Invoice> _invoiceService;
         readonly IService<ListOption> _listOptionService;
-        readonly IBonusService _service;
+        readonly ICustomService _service;
         public BonusController(
             IMapper mapper,
             IService<Invoice> serviceCrud,
             IService<ListOption> listOptionService,
-            IBonusService queryFactory)
+            ICustomService queryFactory)
             : base(mapper)
         {
             _invoiceService = serviceCrud;
@@ -31,7 +32,7 @@ namespace TCP.Api.Controllers
 
 
         [HttpGet("query/{queryType}")]
-        public IGridResult<InvoiceDto> GetQuery(QueryType queryType) 
+        public IGridResult<InvoiceDto> GetQuery(QueryType queryType)
         {
             IGridResult<InvoiceDto> response = new GridResult<InvoiceDto>();
 
@@ -52,19 +53,8 @@ namespace TCP.Api.Controllers
             return response;
         }
 
-        [HttpGet("sp/{datefrom}/{dateto}/{id}")]
-        public IGridResult<InvoiceClientBestSell> GetOneInvoiceDbView(string datefrom, string dateto, int id)
-        {
-            return GetDbSp(datefrom, dateto, id);
-        }
-
-        [HttpGet("sp/{datefrom}/{dateto}")]
-        public IGridResult<InvoiceClientBestSell> GetAllInvoiceDbView(string datefrom, string dateto)
-        {
-            return GetDbSp(datefrom, dateto);
-        }
-
-        private IGridResult<InvoiceClientBestSell> GetDbSp(string datefrom, string dateto, int? id = null)
+        [HttpGet("{datefrom}/{dateto}/{id?}/")]
+        public IGridResult<InvoiceClientBestSell> GetInvoiceDbView(string datefrom, string dateto, int? id = null)
         {
             IGridResult<InvoiceClientBestSell> response = new GridResult<InvoiceClientBestSell>();
 
@@ -85,19 +75,50 @@ namespace TCP.Api.Controllers
             return response;
         }
 
-        [HttpGet("view")]
+        [HttpGet("view/{viewname}")]
 
-        public IGridResult<InvoiceClientBestSell> GetDbView()
+        public IGridResult<InvoiceLineMountTotalsView> GetDbView(string viewname)
         {
-            IGridResult<InvoiceClientBestSell> response = new GridResult<InvoiceClientBestSell>();
+            IGridResult<InvoiceLineMountTotalsView> response = new GridResult<InvoiceLineMountTotalsView>();
 
             try
             {
-             //   var src = _service.GetSp();
-             //   response.Data = _mapper.Map<IEnumerable<InvoiceClientBestSell>>(src);
+                response.Data = _service.ExecuteView(viewname);
 
                 if (response.TotalRecords == 0)
                     HttpContext.Response.StatusCode = (int)HttpStatusCode.NoContent;
+            }
+            catch (Microsoft.Data.SqlClient.SqlException ex)
+            {
+                response.Set(HandleException(Model.Constants.Messages.SP_INVALID, ex));
+                HttpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+            }
+            catch (Exception ex)
+            {
+                response.Set(HandleException(ex));
+                HttpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+            }
+
+            return response;
+        }
+
+        [HttpPost("pdf/{id}")]
+
+        public IGridResult<InvoiceLineMountTotalsView> GetDbView(int id)
+        {
+            IGridResult<InvoiceLineMountTotalsView> response = new GridResult<InvoiceLineMountTotalsView>();
+
+            try
+            {
+                 _service.DownloadPdf();
+
+                if (response.TotalRecords == 0)
+                    HttpContext.Response.StatusCode = (int)HttpStatusCode.NoContent;
+            }
+            catch (Microsoft.Data.SqlClient.SqlException ex)
+            {
+                response.Set(HandleException(Model.Constants.Messages.SP_INVALID, ex));
+                HttpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
             }
             catch (Exception ex)
             {

@@ -23,7 +23,9 @@ namespace TCP.Business.Services
             if (cuitExists)
                 throw new TcpException(Messages.CUIT_EXISTS);
 
-            entity.Disabled = entity.IsDistributor();
+            if (entity.IsDistributor())
+                entity.Status = Model.Enums.MainStatus.DISABLED;
+
             _validatorStrategy.ValidateFields(entity);
 
             _repository.Insert(entity);
@@ -43,14 +45,16 @@ namespace TCP.Business.Services
             if (toUpdate is null)
                 throw new TcpException(Messages.CLIENT_UNFOUND);
 
-            if (toUpdate.Status == Model.Enums.MainStatus.DELETED || toUpdate.Disabled == true)
+            if (toUpdate.Status == Model.Enums.MainStatus.DISABLED)
                 throw new TcpException(Messages.CLIENT_INVALID);
 
             toUpdate.CompanyName = entity.CompanyName;
             toUpdate.Phone = entity.Phone;
             toUpdate.Email = entity.Email;
             toUpdate.Adress = entity.Adress;
-            toUpdate.Disabled = entity.IsDistributor();
+
+            if (entity.IsDistributor())
+                entity.Status = Model.Enums.MainStatus.DISABLED;
 
             _validatorStrategy.ValidateFields(entity);
 

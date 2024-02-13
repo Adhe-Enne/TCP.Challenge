@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Net;
 using TCP.Api.Profiles;
+using TCP.Business.Services;
 using TCP.Model.Constants;
 using TCP.Model.Dto;
 using TCP.Model.Entities;
@@ -220,34 +221,18 @@ namespace TCP.Api.Controllers
             return result;
         }
 
-        [HttpDelete("{id}")]
-        public IGenericResult LogicDelete(int id)
+        [HttpDelete("{id}/{permanently?}")]
+        public IGenericResult LogicDelete(int id, bool delete = false)
         {
-            LogInfo(Model.Constants.Messages.ENTITY_DELETE);
+            LogInfo(delete ? Model.Constants.Messages.ENTITY_DELETE_PERMANETLY : Model.Constants.Messages.ENTITY_DELETE);
             IGenericResult result = new GenericResult();
 
             try
             {
-                result = _invoiceService.LogicDelete(id);
-            }
-            catch (Exception ex)
-            {
-                result.Set(HandleException(ex));
-                HttpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-            }
-
-            return result;
-        }
-
-        [HttpDelete("permanently/{id}")]
-        public IGenericResult PhysicDelete(int id)
-        {
-            LogInfo(Model.Constants.Messages.ENTITY_DELETE_PERMANETLY);
-            IGenericResult result = new GenericResult();
-
-            try
-            {
-                result = _invoiceService.PhysicDelete(id);
+                if (delete)
+                    result = _invoiceService.PhysicDelete(id);
+                else
+                    result = _invoiceService.LogicDelete(id);
             }
             catch (Exception ex)
             {

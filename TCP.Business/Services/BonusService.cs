@@ -10,16 +10,22 @@ using TCP.Model.Enums;
 using TCP.Model.ViewSp;
 using TCP.Repository.Interfaces;
 
+using Address = Invoicer.Models.Address;
+using DetailRow = Invoicer.Models.DetailRow;
+using InvoicerPdf = Invoicer.Services.InvoicerApi;
+using ItemRow = Invoicer.Models.ItemRow;
+using OrientationOption = Invoicer.Models.OrientationOption;
+using SizeOption = Invoicer.Models.SizeOption;
+using TotalRow = Invoicer.Models.TotalRow;
+
 namespace TCP.Business.Services
 {
-    /// <summary>
-    /// Si las consultas tendieran a elevarse en complejidad, utilizamos este factory para dejar los controllers/services lo mas limpio posible.
-    /// </summary>
-    public class BonusService : IBonusService
+
+    public class BonusService : ICustomService
     {
-        readonly IRepositorySql<InvoiceClientBestSell> _repositorySql;
+        readonly IRepositorySql _repositorySql;
         readonly IRepository<Invoice> _repository;
-        public BonusService(IRepository<Invoice> repository, IRepositorySql<InvoiceClientBestSell> repositorySql)
+        public BonusService(IRepository<Invoice> repository, IRepositorySql repositorySql)
         {
             _repository = repository;
             _repositorySql = repositorySql;
@@ -56,22 +62,74 @@ namespace TCP.Business.Services
             return entities.Where(x => x.Detail.Any(p => p.Product.Code == Constants.KeyBusiness.PRODUCT_TARGET));
         }
 
-
         public IEnumerable<InvoiceClientBestSell> GetSp(string datefrom, string dateto, int? id)
         {
+            string spName = KeyBusiness.SP_NAME_LIST;
             DynamicParameters parameters = new();
             parameters.Add(KeyBusiness.SP_PARAM_DATEFROM, datefrom);
             parameters.Add(KeyBusiness.SP_PARAM_DATETO, dateto);
 
-            string query = KeyBusiness.SP_NAME_LIST;
-
             if (id is not null)
             {
-                query = KeyBusiness.SP_NAME_ALONE;
+                spName = KeyBusiness.SP_NAME_ALONE;
                 parameters.Add(KeyBusiness.SP_PARAM_CLIENTID, id);
             }
 
-            return _repositorySql.ExecuteStoredProcedure(query, parameters);
+            var rawData = _repositorySql.ExecuteStoredProcedure(spName, parameters);
+            IEnumerable<InvoiceClientBestSell> spResult = Core.Externals.JsonConvert.DeserializeDynamic<IEnumerable<InvoiceClientBestSell>>(rawData);
+            string data = $"{KeyBusiness.EXPORT_LOG_SP}: {spName} | {KeyBusiness.EXPORT_LOG_TIME}: {DateTime.Now.ToString()} | {KeyBusiness.EXPORT_LOG_RECORDS}: {spResult.Count()}";
+            Core.Framework.IO.SaveFile(KeyBusiness.EXPORT_PATH, KeyBusiness.EXPORT_NAME, data, KeyBusiness.EXPORT_EXTENSION);
+
+            return spResult;
+        }
+
+        public IEnumerable<InvoiceLineMountTotalsView> ExecuteView(string viewName)
+        {
+            string query = $"{KeyBusiness.SQL_SELECT} {viewName}";
+            var rawData = _repositorySql.ExecuteQuery(query);
+
+            return Core.Externals.JsonConvert.DeserializeDynamic<IEnumerable<InvoiceLineMountTotalsView>>(rawData);
+        }
+
+        public void DownloadPdf(int id)
+        {
+            TCP.Model.Entities.Invoice? invoice = _repository.AsQueryable().Where(x => x.Status == MainStatus.ACTIVE).Include(x => x.Client)
+                .Include(x => x.Customer)
+                .Include(x => x.Detail).ThenInclude(d => d.Product).FirstOrDefault();
+
+
+            System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
+
+            string path = @"C:\TCP Files\OUT";
+            string name = "TCP_Invoice.pdf";
+            string fullPath = Path.Combine(Core.Framework.IO.ToFolderNormalize(path), name);
+
+            new InvoicerPdf(SizeOption.A4, OrientationOption.Landscape, "£")
+                .TextColor("#CC0000")
+                .BackColor("#FFD6CC")
+                .Image(@"..\TCP.Docs\tcpmiame.jpg", 250, 50)
+                .Company(Address.Make("FROM", new string[] { "Vodafone Limited", "Vodafone House", "The Connection", "Newbury", "Berkshire RG14 2FN" }, "1471587", "569953277"))
+                .Client(Address.Make("BILLING TO", new string[] { "Isabella Marsh", "Overton Circle", "Little Welland", "Worcester", "WR## 2DJ" }))
+                .Items(new List<ItemRow> {
+                            ItemRow.Make("Nexus 6", "Midnight Blue", (decimal)1, 20, (decimal)166.66, (decimal)199.99),
+                            ItemRow.Make("24 Months (£22.50pm)", "100 minutes, Unlimited texts, 100 MB data 3G plan with 3GB of UK Wi-Fi", (decimal)1, 20, (decimal)360.00, (decimal)432.00),
+                            ItemRow.Make("Special Offer", "Free case (blue)", (decimal)1, 0, (decimal)0, (decimal)0),
+                })
+                .Totals(new List<TotalRow> {
+                            TotalRow.Make("Sub Total", (decimal)526.66),
+                            TotalRow.Make("VAT @ 20%", (decimal)105.33),
+                            TotalRow.Make("Total", (decimal)631.99, true),
+                })
+                .Details(new List<DetailRow> {
+                            DetailRow.Make("PAYMENT INFORMATION", "Make all cheques payable to Vodafone UK Limited.", "", "If you have any questions concerning this invoice, contact our sales department at sales@vodafone.co.uk.", "", "Thank you for your business.")
+                })
+                .Footer("http://www.vodafone.co.uk")
+                .Save(fullPath);
+            
+            //byte[] fileBytes = _fileService.DownloadFile(fullPath);
+
+
+
         }
     }
 }

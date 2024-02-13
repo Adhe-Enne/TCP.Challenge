@@ -21,7 +21,7 @@ namespace TCP.Api
             .Enrich.FromLogContext()
             .WriteTo.Console()
             .WriteTo.File("Logs/Api_FileLogger_.txt", 
-                rollingInterval: RollingInterval.Hour,
+                rollingInterval: RollingInterval.Day,
                 fileSizeLimitBytes: 1024000,
                 outputTemplate: "{Timestamp:yyyy-MM-dd HH:mm:ss.fff} | [{Level:u3}] | {Message:lj}{NewLine}{Exception}")
             .CreateLogger();

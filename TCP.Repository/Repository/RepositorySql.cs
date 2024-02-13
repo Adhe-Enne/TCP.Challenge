@@ -3,11 +3,10 @@ using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using System.Data;
 using TCP.Repository.Interfaces;
-using static Dapper.SqlMapper;
 
 namespace TCP.Repository.Repository
 {
-    public class RepositorySql<T> : IRepositorySql<T> where T : class
+    public class RepositorySql : IRepositorySql
     {
         private readonly SqlConnection _connection;
 
@@ -16,15 +15,15 @@ namespace TCP.Repository.Repository
             _connection = new SqlConnection(context.Database.GetConnectionString());
         }
 
-        public IEnumerable<T> ExecuteStoredProcedure(string storedProcedureName, DynamicParameters parameters)
+        public IEnumerable<dynamic> ExecuteStoredProcedure(string storedProcedureName, DynamicParameters parameters)
         {
             _connection.Open();
-            return _connection.Query<T>(storedProcedureName, parameters, null , true , null , CommandType.StoredProcedure);
+            return _connection.Query(storedProcedureName, parameters, null , true , null , CommandType.StoredProcedure);
         }
 
-        public IEnumerable<T> ExecuteQuery(string query)
+        public IEnumerable<dynamic> ExecuteQuery(string query)
         {
-            return _connection.Query<T>(query);
+            return _connection.Query(query);
         }
     }
 }

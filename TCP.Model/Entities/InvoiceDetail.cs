@@ -10,6 +10,7 @@ namespace TCP.Model.Entities
         {
             DateAdded = DateTime.Now;
             DateUpdated = DateTime.Now;
+            Status = MainStatus.ACTIVE;
         }
 
         public int Id { get; set; }

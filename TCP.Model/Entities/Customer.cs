@@ -9,6 +9,7 @@ namespace TCP.Model.Entities
         public Customer()
         {
             Invoices = new HashSet<Invoice>();
+            Status = MainStatus.ACTIVE;
         }
 
         public int Id { get; set; }

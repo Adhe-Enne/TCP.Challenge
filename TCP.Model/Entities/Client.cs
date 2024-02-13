@@ -9,6 +9,7 @@ namespace TCP.Model.Entities
         public Client()
         {
             Invoices = new HashSet<Invoice>();
+            Status = MainStatus.ACTIVE;
         }
 
         public int Id { get; set; }
@@ -17,7 +18,6 @@ namespace TCP.Model.Entities
         public string? Adress { get; set; }
         public string? Phone { get; set; }
         public string? Email { get; set; }
-        public bool Disabled { get; set; }
         public MainStatus Status { get; set; }
         public DateTime? DateUpdated { get; set; }
         public DateTime? DateAdded { get; set; }

@@ -47,7 +47,6 @@ CREATE TABLE [dbo].[Client](
 	[Adress] [VARCHAR](50),
 	[Phone] [VARCHAR](20),
 	[Email] [VARCHAR](50),
-	[Disabled] [BIT],
 	[Status] [INT] NOT NULL,
 	[DateAdded] [DATETIME],
 	[DateUpdated] [DATETIME]
@@ -98,6 +97,7 @@ GO
 CREATE TABLE [dbo].[ListOption](
 	[Id] [INT] IDENTITY(1,1) NOT NULL,
 	[OptionType] [VARCHAR](50),
+	[OptionId] [INT],
 	[Code] [VARCHAR](50),
 	[Name] [VARCHAR](50),
 	[Description] [VARCHAR](255),
@@ -108,14 +108,70 @@ CONSTRAINT PK_ListOption PRIMARY KEY ([Id])
 )
 GO
 
---select * from Client;
---select * from Invoice;
+CREATE VIEW [InvoiceLineMountTotalsView] AS
+SELECT I.Id [Factura], I.DateAdded [FechaAlta],LP.[Name] [Estado], LP.[Description] [Descripcion], SUM(D.LineAmount) MontoTotal
+FROM Invoice I
+INNER JOIN Invoice_Detail D on I.Id = D.InvoiceId
+INNER JOIN ListOption LP ON LP.OptionId = I.InvoiceStatus
+GROUP BY I.Id, I.DateAdded,LP.[Name], LP.[Description]
+GO
 
 
+CREATE VIEW [InvoiceClientView] AS
+SELECT I.Id [Factura], I.DateAdded [FechaAlta], C.CompanyName [RazonSocial], C.CUIT
+FROM Invoice I
+INNER JOIN Client C on C.Id = I.ClientId
+GO
 
----UPDATE Client
---SET Disabled = 1
-WHERE Id = 1000;
+Select * From InvoiceLineMountTotalsView;
+Select * From InvoiceClientView;
+
+
+CREATE PROCEDURE FacturaPorClienteProductoMasVendido @FechaDesde nvarchar(30), @FechaHasta nvarchar(30), @IdCliente int
+AS
+/*Teniendo en cuenta los campos que agregue para ampliar la logica, selecciono unicamente los mas relevantes*/
+	SELECT
+    I.Id AS Factura,
+    I.ClientId Cliente,
+    I.CustomerId Vendedor,
+    I.TotalAmount,
+    D.Qty,D.ProductId, D.Qty ,P.Code TopSellingProduct, P.Description
+FROM Invoice I
+INNER JOIN Invoice_Detail D ON I.Id = D.InvoiceId
+INNER JOIN Product P ON P.Id = D.ProductId
+WHERE
+    (I.DateAdded BETWEEN @FechaDesde AND @FechaHasta)
+    AND I.Id = @IdCliente
+    AND D.Qty = (
+        SELECT TOP 1 ID.Qty
+        FROM Invoice_Detail ID
+        WHERE ID.InvoiceId = I.Id
+        ORDER BY ID.Qty DESC
+    );
+GO
+
+CREATE PROCEDURE FacturaPorClienteProductoMasVendidoList @FechaDesde nvarchar(30), @FechaHasta nvarchar(30)
+AS
+/*Teniendo en cuenta los campos que agregue para ampliar la logica, selecciono unicamente los mas relevantes*/
+	SELECT
+    I.Id AS Factura,
+    I.ClientId Cliente,
+    I.CustomerId Vendedor,
+    I.TotalAmount,
+    D.Qty,D.ProductId ,P.Code TopSellingProduct, P.Description
+FROM Invoice I
+INNER JOIN Invoice_Detail D ON I.Id = D.InvoiceId
+INNER JOIN Product P ON P.Id = D.ProductId
+WHERE
+    (I.DateAdded BETWEEN @FechaDesde AND @FechaHasta)
+    AND D.Qty = (
+        SELECT TOP 1 ID.Qty
+        FROM Invoice_Detail ID
+        WHERE ID.InvoiceId = I.Id
+        ORDER BY ID.Qty DESC
+    );
+GO
+
 select * from Client;
 select * from Invoice;
 select * from Product;
@@ -125,10 +181,10 @@ select * from ListOption;
 -- Inserts para la tabla Customer
 INSERT INTO [dbo].[Customer] ([Name], [Address], [City], [Email], [Phone], [Status], [DateAdded], [DateUpdated])
 VALUES
-('Fravega', 'Av Francisco Beiro 5763', 'Buenos Aires', 'Fravega@business.net', '123456789', 1, GETDATE(), GETDATE()),
-('Coto', 'Av Córdoba 1527','Entre Rios', 'Coto@business.net', '987654321', 1, GETDATE(), GETDATE()),
-('Compumundo', 'Santiago del Estero 2771','Chubut', 'Compumundo@business.net', '987654321', 1, GETDATE(), GETDATE()),
-('Jumbo', 'Sarmiento 329','Buenos Aires', 'Jumbo@business.net', '01153004000', 1, GETDATE(), GETDATE());
+('CompraGamer', 'Av Francisco Beiro 5763', 'Buenos Aires', 'Fravega@business.net', '123456789', 1, GETDATE(), GETDATE()),
+('Maximus', 'Av Córdoba 1527','Entre Rios', 'Coto@business.net', '987654321', 1, GETDATE(), GETDATE()),
+('Gezatek', 'Santiago del Estero 2771','Chubut', 'Compumundo@business.net', '987654321', 1, GETDATE(), GETDATE()),
+('Compugarden', 'Sarmiento 329','Buenos Aires', 'Jumbo@business.net', '01153004000', 1, GETDATE(), GETDATE());
 
 -- Inserts para la tabla Product
 INSERT INTO [dbo].[Product] ([Price], [Code], [Description], [Status], [DateAdded], [DateUpdated])
@@ -220,24 +276,4 @@ VALUES
 ('PaymentMethod', 'CUOTES', 'Cuotas', 'Pago en financiamiento de Cuotas', 1, GETDATE(), GETDATE()),
 ('PaymentMethod', 'TRANSFER', 'Transferencia', 'Pago con transferencia Bancaria', 1, GETDATE(), GETDATE()),
 ('PaymentMethod', 'VIRTUAL_PAY', 'Billetera Virtual', 'Pago mediante billetera virtual (MP, Uala, Brubank. Etc)', 1, GETDATE(), GETDATE());
-
--- Inserts para la tabla Client
-INSERT INTO [dbo].[Client] ([CompanyName], [CUIT], [Adress], [Phone], [Email], [Disabled], [Status], [DateAdded], [DateUpdated])
-VALUES
-('Client1', '12345678901', 'ClientAddress1', '111111111', 'client1@example.com', 0, 1, GETDATE(), GETDATE()),
-('Client2', '98765432101', 'ClientAddress2', '222222222', 'client2@example.com', 0, 1, GETDATE(), GETDATE());
-
--- Inserts para la tabla Invoice
-INSERT INTO [dbo].[Invoice] ([ClientId], [CustomerId], [TotalQty], [TotalAmount], [PaymentMethod], [Status], [InvoiceStatus], [DateAdded], [DateUpdated], [DueDate])
-VALUES
-(1000, 1, 5, 99.95, 1, 1, 1, GETDATE(), GETDATE(), DATEADD(DAY, 30, GETDATE())),
-(1000, 1, 3, 59.97, 2, 1, 1, GETDATE(), GETDATE(), DATEADD(DAY, 45, GETDATE()));
-
--- Inserts para la tabla Invoice_Detail
-INSERT INTO [dbo].[Invoice_Detail] ([InvoiceId], [ProductId], [Qty], [UnitPrice], [LineAmount], [Status], [DateAdded], [DateUpdated])
-VALUES
-(2003, 1, 2, 19.99, 39.98, 1, GETDATE(), GETDATE()),
-(2003, 2, 3, 29.99, 89.97, 1, GETDATE(), GETDATE()),
-(2004, 1, 1, 19.99, 19.99, 1, GETDATE(), GETDATE()),
-(2004, 2, 2, 29.99, 59.98, 1, GETDATE(), GETDATE());
 

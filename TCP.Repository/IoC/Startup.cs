@@ -11,7 +11,7 @@ namespace TCP.Repository.IoC
     {
         public static void AddRepository(this IServiceCollection services)
         {
-            services.AddScoped(typeof(IRepositorySql<InvoiceClientBestSell>), typeof(RepositorySql<InvoiceClientBestSell>));
+            services.AddScoped(typeof(IRepositorySql), typeof(RepositorySql));
             services.AddScoped(typeof(IRepository<Client>), typeof(Repository<Client>));
             services.AddScoped(typeof(IRepository<Product>), typeof(Repository<Product>));
             services.AddScoped(typeof(IRepository<ListOption>), typeof(Repository<ListOption>));

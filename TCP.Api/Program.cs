@@ -41,10 +41,5 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseCors(MyAllowSpecificOrigins);
 app.MapControllers();
-app.UseDefaultFiles();
-app.UseStaticFiles();
-
 app.Run();
-

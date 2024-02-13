@@ -21,7 +21,7 @@ namespace TCP.Business.Services
 
         public IEnumerable<T> GetAll()
         {
-            return _repository.GetAll();
+            return _repository.AsQueryable();
         }
 
         public IEnumerable<T> Filter(Expression<Func<T, bool>> where, params Expression<Func<T, object>>[] includeProperties)
@@ -52,8 +52,9 @@ namespace TCP.Business.Services
 
             if (entity is IBusinessEntity)
             {
-                ((IBusinessEntity)entity).Status = Model.Enums.MainStatus.DELETED;
+                ((IBusinessEntity)entity).Status = Model.Enums.MainStatus.DISABLED;
             }
+
             _repository.Update(entity);
 
             return new GenericResult(Model.Constants.Messages.ENTITY_DELETED);
