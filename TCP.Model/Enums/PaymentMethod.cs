@@ -2,7 +2,7 @@
 {
     public enum PaymentMethod
     {
-        CASH,
+        CASH = 0,
         DEBIT,
         CREDIT,
         CUOTES,

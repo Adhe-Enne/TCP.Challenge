@@ -1,8 +1,8 @@
-﻿using Core.Abstractions.Model;
+﻿
 
 namespace TCP.Model.ViewSp
 {
-    public class InvoiceClientBestSell : IViewSp
+    public class InvoiceClientBestSell
     {
         public int Factura { get; set; }
         public int Cliente { get; set; }

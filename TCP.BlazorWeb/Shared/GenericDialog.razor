@@ -1,0 +1,44 @@
+﻿@inherits ComponentBase
+
+<MudDialog>
+    <DialogContent >
+        <MudText>@ContentText</MudText>
+    </DialogContent>
+    <DialogActions>
+        <MudButton Color="@Color" Variant="Variant.Filled" OnClick="OK">@ButtonText</MudButton>
+    </DialogActions>
+</MudDialog>
+
+<style>
+    .my-custom-class {
+        backdrop-filter: blur(10px);
+    }
+</style>
+
+@code {
+    [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+
+    [Parameter] public string ContentText { get; set; }
+
+    [Parameter] public string ButtonText { get; set; }
+
+    [Parameter] public Color Color { get; set; }
+    public bool confirmed { get; set; }
+
+    private void OK()
+    {
+        this.MudDialog.Close(DialogResult.Ok(true));
+        Task.Delay(200);
+    }
+
+    void Submit()
+    {
+        MudDialog.Close(DialogResult.Ok(true));
+        Task.Delay(200);
+    }
+    void Cancel() 
+    {
+        MudDialog.Close(DialogResult.Ok(false));
+        Task.Delay(200);
+    }
+}

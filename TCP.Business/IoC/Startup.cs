@@ -25,9 +25,10 @@ namespace TCP.Business.IoC
             services.AddScoped(typeof(IService<InvoiceDetail>), typeof(Service<InvoiceDetail>));
             services.AddScoped(typeof(IService<Product>), typeof(Service<Product>));
             services.AddScoped(typeof(IService<ListOption>), typeof(Service<ListOption>));
+            services.AddScoped(typeof(IService<Customer>), typeof(Service<Customer>));
 
             //Custom
-            services.AddScoped(typeof(ICustomService), typeof(BonusService));
+            services.AddScoped(typeof(ICustomService), typeof(ExtrasService));
         }
     }
 }

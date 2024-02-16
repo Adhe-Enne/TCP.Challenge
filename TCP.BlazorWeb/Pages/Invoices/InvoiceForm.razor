@@ -1,0 +1,193 @@
+﻿@page "/InvoiceForm"
+@using System.ComponentModel.DataAnnotations;
+@using System.Text.RegularExpressions;
+@using Core.Abstractions;
+@using Core.Framework;
+@using TCP.BlazorWeb.Constants;
+@using TCP.Model.Dto;
+@using MudBlazor;
+@inject IDialogService _dialogService
+@inject ISnackbar _snackbar
+@inject TCP.BlazorWeb.Interfaces.IInvoiceService _service;
+
+<MudText Typo="Typo.h2">Facturador</MudText>
+<MudCard Elevation="5">
+    <MudCardHeader>
+        <CardHeaderContent>
+            <MudText Typo="Typo.h6">Nueva Factura</MudText>
+        </CardHeaderContent>
+    </MudCardHeader>
+</MudCard>
+<br />
+
+<MudSpacer />
+<MudOverlay Visible="@_loading" DarkBackground="true">
+    <MudProgressCircular Color="Color.Primary" Indeterminate="true" Style="height:150px;width:150px;" />
+</MudOverlay>
+<MudSpacer />
+<MudGrid>
+    <MudItem xs="12" sm="7">
+        <MudPaper Class="pa-4">
+            <MudForm @ref="form" Model="@entity" @bind-IsValid="@success" @bind-Errors="@errors">
+                <MudSelect T="string" Label="Seleccione Cliente a Facturar" HelperText="Helper text" AnchorOrigin="Origin.BottomCenter" @bind-Value="@entity.ClientId">
+                    @foreach (var item in _clients)
+                    {
+                        <MudSelectItem T="string" Value="@item.Id">@item.CompanyName -  @item.CUIT</MudSelectItem>
+                    }
+                    </MudSelect>         
+                <MudSelect Margin="Margin.Dense" T="string" Label="Seleccione Vendedor" @bind-Value="@entity.CustomerId">
+                @foreach (var item in _customers)
+                {
+                        <MudSelectItem T="string" Value="@item.Id"> @item.Name </MudSelectItem>
+                }
+                </MudSelect>
+
+                <MudSelect Margin="Margin.Dense" T="string" Label="Seleccione Vendedor" @bind-Value="@entity.PaymentMethod">
+                    @foreach (var item in _method)
+                    {
+                        <MudSelectItem T="string" Value="@item.OptionId"> @item.Description </MudSelectItem>
+                    }
+                </MudSelect>
+
+            </MudForm>
+        </MudPaper>
+        <MudPaper Class="pa-4 mt-4">
+            <MudButton Href="/" Variant="Variant.Filled" Color="Color.Error">Cancelar</MudButton>
+            <MudButton @onclick="Save" Variant="Variant.Filled" Color="Color.Success">Guardar</MudButton>
+        </MudPaper>
+    </MudItem>
+    <MudItem xs="12" sm="5">
+        <MudPaper Class="pa-4 mud-height-full">
+            <MudText Typo="Typo.subtitle2">@($"Errors ({errors.Length})")</MudText>
+                @foreach (var error in errors)
+            {
+                <MudText Color="@Color.Error">@error</MudText>
+            }
+        </MudPaper>
+    </MudItem>
+</MudGrid>
+
+<MudGrid>
+    <MudItem xs="2" sm="2" md="2" lg="2" xl="2">
+        <MudTextField @bind-Value="Amount" Label="Amount" Variant="Variant.Outlined" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.AttachMoney" AdornmentColor="Color.Warning" />
+    </MudItem>
+    <MudItem xs="2" sm="2" md="2" lg="2" xl="2">
+        <MudTextField @bind-Value="Search" Label="Search" Variant="Variant.Outlined" Adornment="Adornment.End" AdornmentIcon="@Icons.Material.Filled.Search" AdornmentColor="Color.Secondary" />
+    </MudItem>
+    <MudItem xs="2" sm="2" md="2" lg="2" xl="2">
+        <MudTextField @bind-Value="Amount" Label="Amount" Variant="Variant.Outlined" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.AttachMoney" AdornmentColor="Color.Warning" />
+    </MudItem>
+    <MudItem xs="2" sm="2" md="2" lg="2" xl="2">
+        <MudTextField @bind-Value="Search" Label="Search" Variant="Variant.Outlined" Adornment="Adornment.End" AdornmentIcon="@Icons.Material.Filled.Search" AdornmentColor="Color.Secondary" />
+    </MudItem>
+    <MudItem xs="2" sm="2" md="2" lg="2" xl="2">
+        <MudTextField @bind-Value="Search" Label="Search" Variant="Variant.Outlined" Adornment="Adornment.End" AdornmentIcon="@Icons.Material.Filled.Search" AdornmentColor="Color.Secondary" />
+    </MudItem>
+</MudGrid>
+
+<MudGrid>
+    <MudItem xs="6" sm="6" md="6" lg="6" xl="6">
+        <MudTextField @bind-Value="Search" Label="Search" Variant="Variant.Outlined" Adornment="Adornment.End" AdornmentIcon="@Icons.Material.Filled.Search" AdornmentColor="Color.Secondary" />
+    </MudItem>
+    <MudItem xs="6" sm="6" md="6" lg="6" xl="6">
+        <MudTextField @bind-Value="Search" Label="Search" Variant="Variant.Outlined" Adornment="Adornment.End" AdornmentIcon="@Icons.Material.Filled.Search" AdornmentColor="Color.Secondary" />
+    </MudItem>
+    <MudItem xs="4" sm="4" md="4" lg="4" xl="4">
+        <MudTextField @bind-Value="Search" Label="Search" Variant="Variant.Outlined" Adornment="Adornment.End" AdornmentIcon="@Icons.Material.Filled.Search" AdornmentColor="Color.Secondary" />
+    </MudItem>
+    <MudItem xs="4" sm="4" md="4" lg="4" xl="4">
+        <MudTextField @bind-Value="Search" Label="Search" Variant="Variant.Outlined" Adornment="Adornment.End" AdornmentIcon="@Icons.Material.Filled.Search" AdornmentColor="Color.Secondary" />
+    </MudItem>
+    <MudItem xs="4" sm="4" md="4" lg="4" xl="4">
+        <MudTextField @bind-Value="Search" Label="Search" Variant="Variant.Outlined" Adornment="Adornment.End" AdornmentIcon="@Icons.Material.Filled.Search" AdornmentColor="Color.Secondary" />
+    </MudItem>
+</MudGrid>
+
+<style>
+    .blur {
+        backdrop-filter: blur(10px);
+    }
+</style>
+
+@code {
+    private InvoiceCreateDto entity { get; set; } = new();
+    private InvoiceUpdateDto entityUp { get; set; }=new ();
+    private List<CustomerDto> _customers { get; set; }=new ();
+    private List<ListOptionDto> _method { get; set; }=new ();
+    private List<ClientDto> _clients { get; set; } = new();
+    private bool success;
+    private bool _loading = true;
+    string[] errors = { };
+    MudTextField<string> pwField1;
+    MudForm form = new();
+    private bool ShowDialog { get; set; }
+    public double? Amount { get; set; }
+    public int? Weight { get; set; }
+    public string Search { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        GetData();
+    }
+
+    async void GetData()
+    {
+        _loading = true;
+        await Task.Delay(200);
+        var result = await _service.GetClients();
+        _clients = result.Data.ToList();
+
+        await Task.Delay(200);
+        var customer =await _service.GetCustomers();
+        _customers = customer.Data.ToList();
+
+        await Task.Delay(200);
+        var status = await _service.GetStatus();
+        _method = status.Data.ToList();
+
+        _loading = false;
+        StateHasChanged();
+    }
+
+    private async Task Save()
+    {
+        _snackbar.Add(Core.Externals.JsonConvert.Serialize(this.entity), Severity.Normal);
+        return;
+
+        var options = new DialogOptions { ClassBackground = "blur" };
+        var parameters = new DialogParameters<GenericDialog>();
+        parameters.Add(x => x.ContentText, "¿Estás seguro de que quieres guardar el registro?");
+        parameters.Add(x => x.ButtonText, "Guardar");
+        parameters.Add(x => x.Color, Color.Primary);
+        var dialog = _dialogService.Show<GenericDialog>("Confirmación", parameters, options);
+        var result = await dialog.Result;
+
+        if (result.Data is bool && (bool)result.Data)
+        {
+            dialog.Close();
+
+            var response = await _service.Save(entity);
+
+            parameters = new DialogParameters<GenericDialog>();
+            parameters.Add(x => x.ContentText, $"La respuesta del servicio es: {response.Message}");
+            parameters.Add(x => x.ButtonText, "Cerrar");
+            parameters.Add(x => x.Color, response.HasError ? Color.Error : Color.Success);
+
+            dialog = _dialogService.Show<GenericDialog>(response.HasError ? Constants.Messages.ERROR_DIALOG : Constants.Messages.SUCCESS_DIALOG, parameters, options);
+            result = await dialog.Result;
+
+            if (!response.HasError)
+            {
+                _snackbar.Add("¡Registro Actualizado con Exito!", Severity.Success);
+                entity = new();
+            }
+            else
+                _snackbar.Add("¡No se pudo Actualizar Registro!", Severity.Error);
+
+        }
+
+    }
+
+
+
+}

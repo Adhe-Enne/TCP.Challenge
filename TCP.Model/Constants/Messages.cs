@@ -5,6 +5,7 @@
         //Error const
         public const string ENTITY_UNFOUND = "¡No se encontro registro en la base de Datos!";
         public const string INVOICE_UNFOUND = "¡No se encontro Factura en la base de Datos!";
+        public const string INVOICE_INVALID_STATUS= "¡Factura con estado Invalido!";
         public const string CLIENT_UNFOUND = "¡No se encontro Cliente en la base de Datos!";
         public const string CLIENT_INVALID = "¡El Cliente se encuentra Deshabilitado/Eliminado!";
         public const string PROD_UNFOUND = "¡No se encontro Producto en la base de Datos!";

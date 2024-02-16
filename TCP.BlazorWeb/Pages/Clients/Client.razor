@@ -1,0 +1,166 @@
+﻿@page "/Client"
+@using System.Net.Http.Json
+@using MudBlazor;
+@using TCP.Model.Dto;
+@using Core.Abstractions;
+@using Core.Framework;
+@inject TCP.BlazorWeb.Services.IClientService _clientService
+@inject IDialogService _dialogService
+@inject ISnackbar _snackbar
+
+<MudText Typo="Typo.h2">Clientes</MudText>
+<MudCard Elevation="25">
+    <MudCardHeader>
+        <CardHeaderContent>
+            <MudText Typo="Typo.h6">Lista Clientes</MudText>
+        </CardHeaderContent>
+    </MudCardHeader>
+</MudCard>
+<br/>
+
+<MudDataGrid T="ClientDto"  ReadOnly = "false" Items="@_apiResult.Data" EditMode="@DataGridEditMode.Form"
+             Bordered="true" Dense="true" EditTrigger="@DataGridEditTrigger.Manual" SortMode="SortMode.Multiple" QuickFilter="@_quickFilter" CommittedItemChanges="@Update">
+    <ToolBarContent>
+        <MudText Typo="Typo.h6">Periodic Elements</MudText>
+        <MudSpacer />
+        <MudTextField @bind-Value="_searchString" Placeholder="Search" Adornment="Adornment.Start" Immediate="true"
+                      AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+    </ToolBarContent>
+        <Columns>
+        <PropertyColumn Property="x => x.CompanyName" Title="Razon Social" IsEditable="true" />
+        <PropertyColumn Property="x => x.CUIT" Title="CUIT" IsEditable="true" />
+        <PropertyColumn Property="x => x.Adress" Title="Direccion" IsEditable="true" />
+        <PropertyColumn Property="x => x.Phone" Title="Telefono" IsEditable="true" />
+        <TemplateColumn Hidden="false" CellClass="d-flex justify-end">
+            <CellTemplate>
+                <MudIconButton Size="@Size.Small" Icon="@Icons.Material.Outlined.Edit" OnClick="@context.Actions.StartEditingItemAsync" />
+            </CellTemplate>
+        </TemplateColumn>
+    </Columns>
+    <PagerContent>
+        <MudDataGridPager T="ClientDto" />
+    </PagerContent>
+</MudDataGrid>
+
+@code {
+    private List<string> editEvents = new();
+    private bool _loading = true;
+    private bool showFrom = false;
+    private bool blockSwitch = false;
+    private string searchString = "";
+    private string _searchString = "";
+    private ClientCreateDto create = new();
+    private IGridResult<ClientDto> _apiResult = new GridResult<ClientDto>();
+    private bool _editTriggerRowClick;
+    private List<string> _events = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        GetClients();
+        await Task.Delay(200);
+    }
+
+    void StartedEditingItem(ClientDto item)
+    {
+        _events.Insert(0, $"Event = StartedEditingItem, Data = {System.Text.Json.JsonSerializer.Serialize(item)}");
+    }
+
+
+    private async void GetClients()
+    {
+        _loading = true;
+        await Task.Delay(200);
+        _apiResult = await _clientService.GetClients();
+        _loading = false;
+        StateHasChanged();
+    }
+
+    private void ClearEventLog()
+    {
+        editEvents.Clear();
+    }
+
+    private void AddEditionEvent(string message)
+    {
+        editEvents.Add(message);
+        StateHasChanged();
+    }
+
+    private async Task Update(ClientDto entity)
+    {
+        var options = new DialogOptions { ClassBackground = "blur" };
+        var parameters = new DialogParameters<GenericDialog>();
+        parameters.Add(x => x.ContentText, "¿Estás seguro de que quieres guardar el registro?");
+        parameters.Add(x => x.ButtonText, "Guardar");
+        parameters.Add(x => x.Color, Color.Primary);
+        var dialog = _dialogService.Show<GenericDialog>("Confirmación", parameters, options);
+        var result = await dialog.Result;
+
+        if (result.Data is bool && (bool)result.Data)
+        {
+            dialog.Close();
+
+            var response = await _clientService.Update(entity);
+
+            parameters = new DialogParameters<GenericDialog>();
+            parameters.Add(x => x.ContentText, $"La respuesta del servicio es: {response.Message}");
+            parameters.Add(x => x.ButtonText, "Cerrar");
+            parameters.Add(x => x.Color, response.HasError ?  Color.Error : Color.Success);
+
+            dialog = _dialogService.Show<GenericDialog>(response.HasError ? Constants.Messages.ERROR_DIALOG : Constants.Messages.SUCCESS_DIALOG, parameters, options);
+            result = await dialog.Result;
+
+            if (!response.HasError)
+            {
+                GetClients();
+                _snackbar.Add("¡Registro Actualizado con Exito!", Severity.Success);
+            }
+            else
+            {
+                    _snackbar.Add("¡No se pudo Actualizar Registro!", Severity.Error); 
+            }
+        }
+    }
+
+    void CheckResponse ()
+    {
+        
+    }
+
+
+
+    private bool FilterFunc(ClientDto element)
+    {
+        if (string.IsNullOrWhiteSpace(searchString))
+            return true;
+        if (element.CompanyName.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if (element.Phone.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if (element.CUIT.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if ($"{element.Adress} {element.CompanyName} {element.CUIT} {element.Phone}".Contains(searchString))
+            return true;
+        return false;
+    }
+    
+    private Func<ClientDto, bool> _quickFilter => x =>
+    {
+        if (string.IsNullOrWhiteSpace(_searchString))
+            return true;
+
+        if (x.CompanyName.Contains(_searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+
+        if (x.Adress.Contains(_searchString, StringComparison.OrdinalIgnoreCase))
+            return true; 
+
+            if (x.CUIT.Contains(_searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+
+        if ($"{x.CompanyName} {x.Adress} {x.CUIT}".Contains(_searchString))
+            return true;
+
+        return false;
+    };
+}

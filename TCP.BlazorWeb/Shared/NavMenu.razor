@@ -1,39 +1,16 @@
-﻿<div class="top-row ps-3 navbar navbar-dark">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="">TCP.BlazorWeb</a>
-        <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-    </div>
-</div>
-
-<div class="@NavMenuCssClass" @onclick="ToggleNavMenu">
-    <nav class="flex-column">
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
-                <span class="oi oi-home" aria-hidden="true"></span> Home
-            </NavLink>
-        </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="counter">
-                <span class="oi oi-plus" aria-hidden="true"></span> Counter
-            </NavLink>
-        </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="fetchdata">
-                <span class="oi oi-list-rich" aria-hidden="true"></span> Fetch data
-            </NavLink>
-        </div>
-    </nav>
-</div>
-
-@code {
-    private bool collapseNavMenu = true;
-
-    private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null;
-
-    private void ToggleNavMenu()
-    {
-        collapseNavMenu = !collapseNavMenu;
-    }
-}
+﻿<link href="https://use.fontawesome.com/releases/v5.14.0/css/all.css" rel="stylesheet">
+<MudPaper Width="250" Class="d-inline-flex py-4" Elevation="1" >
+    <MudNavMenu Class="mud-width-full">
+        <MudText Typo="Typo.h5" Class="px-4">Menu</MudText>
+        <MudText Typo="Typo.subtitle1" Class="px-4 mud-text-secondary">Facurador</MudText>
+        <MudDivider Class="my-2" />
+        <MudNavGroup Title="Clientes" Icon="fa fa-users" Expanded="false">
+            <MudNavLink Href="/Client" Icon="fa fa-list" IconColor="Color.Success">Gestion Clientes</MudNavLink>
+            <MudNavLink Href="/ClientForm" Icon="@Icons.Material.Filled.PersonAdd" IconColor="Color.Info">Crear Nuevo Cliente</MudNavLink>
+        </MudNavGroup>
+        <MudNavGroup Title="Facturas" Icon="@Icons.Material.Filled.ReceiptLong" Expanded="false">
+            <MudNavLink Href="/invoice" Icon="fa fa-list" IconColor="Color.Success" >Gestion Facturas</MudNavLink>
+            <MudNavLink Href="/invoiceForm" Icon="@Icons.Material.Filled.PostAdd" IconColor="Color.Info">Crear Nueva Factura</MudNavLink>
+        </MudNavGroup>
+    </MudNavMenu>
+</MudPaper>

@@ -2,7 +2,7 @@
 {
     public enum MainStatus
     {
-        DISABLED,
-        ACTIVE,
+        DISABLED = 0,
+        ACTIVE = 1,
     }
 }

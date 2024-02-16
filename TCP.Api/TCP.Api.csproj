@@ -17,6 +17,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\TCP.Business\TCP.Business.csproj" />
+    <ProjectReference Include="..\TCP.Model.Dto\TCP.Model.Dto.csproj" />
   </ItemGroup>
 
   <ItemGroup>

@@ -97,7 +97,7 @@ GO
 CREATE TABLE [dbo].[ListOption](
 	[Id] [INT] IDENTITY(1,1) NOT NULL,
 	[OptionType] [VARCHAR](50),
-	[OptionId] [INT],
+	[OptionId] [INT] not null,
 	[Code] [VARCHAR](50),
 	[Name] [VARCHAR](50),
 	[Description] [VARCHAR](255),
@@ -122,9 +122,6 @@ SELECT I.Id [Factura], I.DateAdded [FechaAlta], C.CompanyName [RazonSocial], C.C
 FROM Invoice I
 INNER JOIN Client C on C.Id = I.ClientId
 GO
-
-Select * From InvoiceLineMountTotalsView;
-Select * From InvoiceClientView;
 
 
 CREATE PROCEDURE FacturaPorClienteProductoMasVendido @FechaDesde nvarchar(30), @FechaHasta nvarchar(30), @IdCliente int
@@ -172,13 +169,6 @@ WHERE
     );
 GO
 
-select * from Client;
-select * from Invoice;
-select * from Product;
-select * from Invoice_Detail;
-select * from Customer;
-select * from ListOption;
--- Inserts para la tabla Customer
 INSERT INTO [dbo].[Customer] ([Name], [Address], [City], [Email], [Phone], [Status], [DateAdded], [DateUpdated])
 VALUES
 ('CompraGamer', 'Av Francisco Beiro 5763', 'Buenos Aires', 'Fravega@business.net', '123456789', 1, GETDATE(), GETDATE()),
@@ -277,3 +267,16 @@ VALUES
 ('PaymentMethod', 'TRANSFER', 'Transferencia', 'Pago con transferencia Bancaria', 1, GETDATE(), GETDATE()),
 ('PaymentMethod', 'VIRTUAL_PAY', 'Billetera Virtual', 'Pago mediante billetera virtual (MP, Uala, Brubank. Etc)', 1, GETDATE(), GETDATE());
 
+
+INSERT INTO [dbo].[Client] (CompanyName, CUIT, Adress, Phone, Email, Status, DateAdded, DateUpdated)
+VALUES 
+('Tecnologías Innovadoras', '30-12345678-9', 'Calle Falsa 123', '011 1234-5678', 'contacto@tecnologiasinnovadoras.com', 1, GETDATE(), GETDATE()),
+('Soluciones Creativas', '33-87654321-6', 'Avenida Siempre Viva 456', '011 8765-4321', 'info@solucionescreativas.com', 1, GETDATE(), GETDATE()),
+('Distruibuidora Diseños Modernos', '27-18273645-4', 'Boulevard de los Sueños Rotos 789', '011 1827-3645', 'soporte@disenosmodernos.com', 0, GETDATE(), GETDATE()),
+('Daniel Nina Corp', '33-87654321-8', 'Calle Falsa 123', '011 1234-5678', 'contacto@tecnologiasinnovadoras.com', 1, GETDATE(), GETDATE()),
+('Armando Paredes', '33-87654321-8', 'Avenida Siempre Viva 456', '011 8765-4321', 'info@solucionescreativas.com', 1, GETDATE(), GETDATE());
+
+INSERT INTO [dbo].[Invoice] (ClientId, CustomerId, TotalQty, TotalAmount, PaymentMethod, Status, InvoiceStatus, DateAdded, DateUpdated, DueDate)
+VALUES 
+(1000, 2, 5, 500.00, 2, 1, 1, GETDATE(), GETDATE(), DATEADD(DAY, 30, GETDATE())),
+(1001, 3, 20, 2000.00, 1, 1, 1, GETDATE(), GETDATE(), DATEADD(DAY, 30, GETDATE()));

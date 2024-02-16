@@ -1,9 +1,18 @@
 ﻿@page "/"
 
-<PageTitle>Index</PageTitle>
+<MudContainer>
+    <MudText Typo="Typo.h4">Bienvenido a mi aplicación</MudText>
+    <MudText Typo="Typo.body1">
+        Esta aplicación se ha desarrollado utilizando las siguientes tecnologías y patrones:
+    </MudText>
+    <MudList>
+        <MudListItem>.NET 6</MudListItem>
+        <MudListItem>Blazor Server</MudListItem>
+        <MudListItem>MudBlazor</MudListItem>
+        <MudListItem>Inyección de dependencias</MudListItem>
+        <MudListItem>Patrón IOC (Inversión de Control)</MudListItem>
+        <MudListItem>Patrón Repository con Entity Framework</MudListItem>
+        <MudListItem>Base de datos SQL Server</MudListItem>
+    </MudList>
 
-<h1>Hello, world!</h1>
-
-Welcome to your new app.
-
-<SurveyPrompt Title="How is Blazor working for you?" />
+</MudContainer>

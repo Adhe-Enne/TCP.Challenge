@@ -10,6 +10,12 @@ namespace TCP.Api.Profiles
         {
             CreateMap<Product, ProductDto>()
                 .ReverseMap();
+
+            CreateMap<ListOption, ListOptionDto>()
+                .ReverseMap();
+
+            CreateMap<Customer, CustomerDto>()
+                .ReverseMap();
         }
     }
 }

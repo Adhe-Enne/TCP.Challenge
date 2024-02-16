@@ -23,10 +23,10 @@ namespace TCP.Business.Services
             if (cuitExists)
                 throw new TcpException(Messages.CUIT_EXISTS);
 
+            _validatorStrategy.ValidateFields(entity);
+
             if (entity.IsDistributor())
                 entity.Status = Model.Enums.MainStatus.DISABLED;
-
-            _validatorStrategy.ValidateFields(entity);
 
             _repository.Insert(entity);
 

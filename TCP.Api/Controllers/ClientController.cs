@@ -109,7 +109,7 @@ namespace TCP.Api.Controllers
             return result;
         }
 
-        [HttpPatch]
+        [HttpPut]
         public IGenericResult Update([FromBody] ClientDto entity)
         {
             LogInfo(Model.Constants.Messages.ENTITY_UPDATE, entity);

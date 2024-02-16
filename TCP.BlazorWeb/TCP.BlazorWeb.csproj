@@ -6,4 +6,19 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="MudBlazor" Version="6.15.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Adhe.Core\Core.Abstractions\Core.Abstractions.csproj" />
+    <ProjectReference Include="..\Adhe.Core\Core.Externals\Core.Externals.csproj" />
+    <ProjectReference Include="..\Adhe.Core\Core.Framework\Core.Framework.csproj" />
+    <ProjectReference Include="..\TCP.Model.Dto\TCP.Model.Dto.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\css\" />
+  </ItemGroup>
+
 </Project>

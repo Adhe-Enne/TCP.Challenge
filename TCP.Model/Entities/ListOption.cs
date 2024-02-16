@@ -7,6 +7,8 @@ namespace TCP.Model.Entities
     public class ListOption : Core.Abstractions.IEntity, IDatetimeManaged, IBusinessEntity
     {
         public int Id { get; set; }
+        public int OptionId { get; set; }
+
         public string? OptionType { get; set; }
         public string? Code { get; set; }
         public string? Name { get; set; }

@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Adhe.Core\Core.Abstractions\Core.Abstractions.csproj" />
+    <ProjectReference Include="..\Adhe.Core\Core.Abstractions\Core.Abstractions.csproj" />
   </ItemGroup>
 
 </Project>

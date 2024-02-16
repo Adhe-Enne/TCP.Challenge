@@ -79,6 +79,9 @@ namespace TCP.Business.Services
             if (toUpdate is null)
                 throw new TcpException(Messages.INVOICE_UNFOUND);
 
+            if (toUpdate.InvoiceStatus <= InvoiceStatus.FINISHED)
+                throw new TcpException($"{Messages.INVOICE_INVALID_STATUS}: {toUpdate.InvoiceStatus}");
+
             Product? prod;
             InvoiceDetail? detailToUpdate;
 
